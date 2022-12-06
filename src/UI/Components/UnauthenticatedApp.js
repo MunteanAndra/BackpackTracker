@@ -1,13 +1,18 @@
 import {Divider, Grid} from '@mui/material';
-import {Footer} from "./Footer";
-import blackBackpack from '../../images/yellowBackpack.jpeg';
+import blackBackpack from '../../images/blackBackpack.jpg';
 import {BlackButton} from "./CustomButtons/BlackButton";
-import {Navbar} from "./Navbar";
+import {useNavigate} from 'react-router-dom';
 
 export const UnauthenticatedApp = () => {
+
+    let navigate = useNavigate();
+
+    const handleLogin = () => {
+        navigate('/Login');
+    }
+
     return (
         <>
-            <Navbar />
             <Grid
                 container
                 style={{
@@ -53,7 +58,9 @@ export const UnauthenticatedApp = () => {
                             alignItems: 'center',
                         }}
                     >
-                        <BlackButton>
+                        <BlackButton
+                            onClick={handleLogin}
+                        >
                             LOGIN
                         </BlackButton>
                         <div
@@ -72,7 +79,7 @@ export const UnauthenticatedApp = () => {
                     </div>
                 </Grid>
                 <Grid item xs={6} style={{display: 'flex', justifyContent: 'center'}}>
-                    <img src={blackBackpack} style={{ width: '25rem'}} alt="backpack"/>
+                    <img src={blackBackpack} style={{ width: '22.5rem'}} alt="backpack"/>
                 </Grid>
             </Grid>
             <Divider
@@ -83,7 +90,6 @@ export const UnauthenticatedApp = () => {
                     padding: '2rem',
                 }}
             />
-            <Footer />
         </>
     );
 };
