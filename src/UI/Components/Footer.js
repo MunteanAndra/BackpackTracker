@@ -3,7 +3,7 @@ import {Grid} from "@mui/material";
 export const Footer = () => {
     return (
         <>
-            <Grid container style={{paddingTop: '2rem'}}>
+            <Grid container style={{padding: '2rem 0rem'}}>
                 <Grid item
                       xs={6}
                       style={{

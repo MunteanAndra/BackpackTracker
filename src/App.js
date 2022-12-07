@@ -3,6 +3,7 @@ import {Routes, Route} from 'react-router-dom';
 import {Login} from "./UI/Pages/Login";
 import {Navbar} from "./UI/Components/Navbar";
 import {Footer} from "./UI/Components/Footer";
+import {SignUp} from "./UI/Pages/SignUp";
 
 const App = () => {
 
@@ -15,6 +16,9 @@ const App = () => {
                 />
                 <Route path = "/Login"
                        element = { <Login /> }
+                />
+                <Route path = "/SignUp"
+                       element = { <SignUp /> }
                 />
             </Routes>
             <Footer />

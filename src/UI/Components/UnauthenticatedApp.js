@@ -5,10 +5,15 @@ import {useNavigate} from 'react-router-dom';
 
 export const UnauthenticatedApp = () => {
 
-    let navigate = useNavigate();
+    let navigateToLogin = useNavigate();
+    let navigateToSignUp = useNavigate();
 
     const handleLogin = () => {
-        navigate('/Login');
+        navigateToLogin('/Login');
+    }
+
+    const handleSignUp = () => {
+        navigateToSignUp('/SignUp');
     }
 
     return (
@@ -73,7 +78,9 @@ export const UnauthenticatedApp = () => {
                         >
                             OR
                         </div>
-                        <BlackButton>
+                        <BlackButton
+                            onClick={handleSignUp}
+                        >
                             SIGN UP
                         </BlackButton>
                     </div>
@@ -87,7 +94,7 @@ export const UnauthenticatedApp = () => {
                     width: '100%',
                     height: '2rem',
                     color: '#18191A',
-                    padding: '2rem',
+                    padding: '2rem 0rem',
                 }}
             />
         </>

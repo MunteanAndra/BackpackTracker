@@ -8,4 +8,8 @@ export const BlackButton = styled(Button)(() => ({
     height: '3.5rem',
     fontStyle: 'normal',
     fontSize: '1rem',
+    '&:hover': {
+        backgroundColor: '#fff',
+        color: '#030303',
+    },
 }));
