@@ -1,4 +1,4 @@
-import {Divider, Grid} from '@mui/material';
+import {Grid} from '@mui/material';
 import blackBackpack from '../../images/blackBackpack.jpg';
 import {BlackButton} from "./CustomButtons/BlackButton";
 import {useNavigate} from 'react-router-dom';
@@ -89,14 +89,6 @@ export const UnauthenticatedApp = () => {
                     <img src={blackBackpack} style={{ width: '22.5rem'}} alt="backpack"/>
                 </Grid>
             </Grid>
-            <Divider
-                style={{
-                    width: '100%',
-                    height: '2rem',
-                    color: '#18191A',
-                    padding: '2rem 0rem',
-                }}
-            />
         </>
     );
 };

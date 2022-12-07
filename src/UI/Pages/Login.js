@@ -1,8 +1,16 @@
-import {Divider, Grid, TextField} from "@mui/material";
+import {Grid, TextField} from "@mui/material";
 import mobileGoogleMaps from '../../images/mobileGoogleMaps.jpg';
 import {BlackButton} from "../Components/CustomButtons/BlackButton";
+import {useNavigate} from "react-router-dom";
 
 export const Login = () => {
+
+    let navigateAuthHome = useNavigate();
+
+    const handleRedirectAuthHome = () => {
+        navigateAuthHome('/Authenticated');
+    };
+
     return (
         <>
             <Grid container>
@@ -40,19 +48,11 @@ export const Login = () => {
                         <TextField id="outlined-basic" label="Enter your password" variant="outlined" type="password"
                                    style={{minWidth: '15rem'}}/>
                     </div>
-                    <BlackButton>
+                    <BlackButton onClick={handleRedirectAuthHome}>
                         Log in
                     </BlackButton>
                 </Grid>
             </Grid>
-            <Divider
-                style={{
-                    width: '100%',
-                    height: '2rem',
-                    color: '#18191A',
-                    padding: '2rem 0rem',
-                }}
-            />
         </>
     );
 };

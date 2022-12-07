@@ -1,8 +1,16 @@
-import {Grid} from "@mui/material";
+import {Divider, Grid} from "@mui/material";
 
 export const Footer = () => {
     return (
         <>
+            <Divider
+                style={{
+                    width: '100%',
+                    height: '2rem',
+                    color: '#18191A',
+                    padding: '2rem 0rem',
+                }}
+            />
             <Grid container style={{padding: '2rem 0rem'}}>
                 <Grid item
                       xs={6}

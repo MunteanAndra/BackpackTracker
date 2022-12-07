@@ -1,8 +1,16 @@
-import {Divider, Grid, TextField} from "@mui/material";
+import {Grid, TextField} from "@mui/material";
 import {BlackButton} from "../Components/CustomButtons/BlackButton";
 import yellowBackpack from "../../images/yellowBackpack.jpg";
+import {useNavigate} from "react-router-dom";
 
 export const SignUp = () => {
+
+    let navigateAuthHome = useNavigate();
+
+    const handleRedirectAuthHome = () => {
+        navigateAuthHome('/Authenticated');
+    };
+
     return(
         <>
             <Grid container style={{paddingTop: '5rem'}}>
@@ -39,19 +47,11 @@ export const SignUp = () => {
                             *password must be at least<br />6 characters long
                         </div>
                     </div>
-                    <BlackButton>
+                    <BlackButton onClick={handleRedirectAuthHome}>
                         Sign up
                     </BlackButton>
                 </Grid>
             </Grid>
-            <Divider
-                style={{
-                    width: '100%',
-                    height: '2rem',
-                    color: '#18191A',
-                    padding: '2rem 0rem',
-                }}
-            />
         </>
     );
 };

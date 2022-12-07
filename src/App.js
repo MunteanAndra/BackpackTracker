@@ -4,6 +4,7 @@ import {Login} from "./UI/Pages/Login";
 import {Navbar} from "./UI/Components/Navbar";
 import {Footer} from "./UI/Components/Footer";
 import {SignUp} from "./UI/Pages/SignUp";
+import {AuthenticatedApp} from "./UI/Components/AuthenticatedApp";
 
 const App = () => {
 
@@ -13,6 +14,9 @@ const App = () => {
             <Routes>
                 <Route path = "/"
                        element = { <UnauthenticatedApp /> }
+                />
+                <Route path = "/Authenticated"
+                       element = { <AuthenticatedApp /> }
                 />
                 <Route path = "/Login"
                        element = { <Login /> }
