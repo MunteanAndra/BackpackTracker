@@ -2,6 +2,7 @@ import {Box, Grid} from "@mui/material";
 import {BlackButton} from "./CustomButtons/BlackButton";
 import {AddButton} from "./CustomButtons/AddButton";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import pinIcon from "../../images/pinIcon.png";
 
 export const AuthenticatedApp = () => {
     return(
@@ -32,8 +33,9 @@ export const AuthenticatedApp = () => {
                       paddingTop: '3rem',
                   }}
             >
-                <Box border={1} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: '3rem' }}>
-                    <div style={{paddingRight: '3rem', fontSize: '1.5rem', fontWeight: '500'}} >BackPack1</div>
+                <Box border={1} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3rem', width: '40%' }}>
+                    <img src={pinIcon} alt="PinIcon" width="10%"/>
+                    <div style={{padding: '0rem 3rem', fontSize: '1.5rem', fontWeight: '500'}} >BackPack1</div>
                     <BlackButton>
                         Show on Map
                     </BlackButton>

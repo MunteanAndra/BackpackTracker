@@ -8,6 +8,7 @@ export const AddButton = styled(Button)(() => ({
     height: '3.5rem',
     fontStyle: 'normal',
     fontSize: '1rem',
+    borderWidth: '0.2rem',
     '&:hover': {
         backgroundColor: '#030303',
         color: '#FFFFFF',
