@@ -5,27 +5,31 @@ import {Navbar} from "./UI/Components/Navbar";
 import {Footer} from "./UI/Components/Footer";
 import {SignUp} from "./UI/Pages/SignUp";
 import {AuthenticatedApp} from "./UI/Components/AuthenticatedApp";
+import {AddItem} from "./UI/Pages/AddItem";
 
 const App = () => {
 
     return (
         <div className="App">
-            <Navbar />
+            <Navbar/>
             <Routes>
-                <Route path = "/"
-                       element = { <UnauthenticatedApp /> }
+                <Route path="/"
+                       element={<UnauthenticatedApp/>}
                 />
-                <Route path = "/Authenticated"
-                       element = { <AuthenticatedApp /> }
+                <Route path="/Authenticated"
+                       element={<AuthenticatedApp/>}
                 />
-                <Route path = "/Login"
-                       element = { <Login /> }
+                <Route path="/Login"
+                       element={<Login/>}
                 />
-                <Route path = "/SignUp"
-                       element = { <SignUp /> }
+                <Route path="/SignUp"
+                       element={<SignUp/>}
+                />
+                <Route path="/AddItem"
+                       element={<AddItem/>}
                 />
             </Routes>
-            <Footer />
+            <Footer/>
         </div>
     );
 }

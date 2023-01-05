@@ -3,8 +3,16 @@ import {BlackButton} from "./CustomButtons/BlackButton";
 import {AddButton} from "./CustomButtons/AddButton";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import pinIcon from "../../images/pinIcon.png";
+import {useNavigate} from "react-router-dom";
 
 export const AuthenticatedApp = () => {
+
+    let navigateToAddItem = useNavigate();
+
+    const handleAddItem = () => {
+        navigateToAddItem('/AddItem');
+    }
+
     return(
         <Grid container style={{padding: '4rem 0rem'}}>
             <Grid item
@@ -55,6 +63,7 @@ export const AuthenticatedApp = () => {
                     startIcon={<AddCircleIcon />}
                     variant="outlined"
                     color="error"
+                    onClick={handleAddItem}
                 >
                     Add new backpack
                 </AddButton>
