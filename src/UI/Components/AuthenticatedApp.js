@@ -8,9 +8,14 @@ import {useNavigate} from "react-router-dom";
 export const AuthenticatedApp = () => {
 
     let navigateToAddItem = useNavigate();
+    let navigateToShowLocation = useNavigate();
 
     const handleAddItem = () => {
         navigateToAddItem('/AddItem');
+    }
+
+    const handleShowLocation = () => {
+        navigateToShowLocation('/ShowLocation');
     }
 
     return(
@@ -44,7 +49,7 @@ export const AuthenticatedApp = () => {
                 <Box border={1} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3rem', width: '40%' }}>
                     <img src={pinIcon} alt="PinIcon" width="10%"/>
                     <div style={{padding: '0rem 3rem', fontSize: '1.5rem', fontWeight: '500'}} >BackPack1</div>
-                    <BlackButton>
+                    <BlackButton onClick={handleShowLocation}>
                         Show on Map
                     </BlackButton>
                 </Box>

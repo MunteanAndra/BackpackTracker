@@ -1,8 +1,16 @@
 import {Box, Divider, Grid, TextField} from "@mui/material";
 import {BlackButton} from "../Components/CustomButtons/BlackButton";
 import pinIcon from "../../images/pinIcon.png";
+import {useNavigate} from "react-router-dom";
 
 export const AddItem = () => {
+
+    let navigateToShowLocation = useNavigate();
+
+    const handleShowLocation = () => {
+        navigateToShowLocation('/ShowLocation');
+    }
+
     return (
         <>
             <Grid container>
@@ -28,9 +36,14 @@ export const AddItem = () => {
                     >
                         <img src={pinIcon} alt="PinIcon" width="10%"/>
                         <div style={{padding: '0rem 3rem', fontSize: '1.5rem', fontWeight: '500'}}>BackPack1</div>
-                        <BlackButton>
-                            Show on Map
-                        </BlackButton>
+                        <div>
+                            <BlackButton onClick={handleShowLocation}>
+                                Show on Map
+                            </BlackButton>
+                            <BlackButton style={{ marginTop: '0.5rem' }}>
+                                Delete
+                            </BlackButton>
+                        </div>
                     </Box>
                 </Grid>
                 <Grid item xs={1}>

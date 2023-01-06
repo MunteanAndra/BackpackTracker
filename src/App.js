@@ -6,6 +6,7 @@ import {Footer} from "./UI/Components/Footer";
 import {SignUp} from "./UI/Pages/SignUp";
 import {AuthenticatedApp} from "./UI/Components/AuthenticatedApp";
 import {AddItem} from "./UI/Pages/AddItem";
+import {ShowLocation} from "./UI/Pages/ShowLocation";
 
 const App = () => {
 
@@ -27,6 +28,9 @@ const App = () => {
                 />
                 <Route path="/AddItem"
                        element={<AddItem/>}
+                />
+                <Route path="/ShowLocation"
+                       element={<ShowLocation/>}
                 />
             </Routes>
             <Footer/>
