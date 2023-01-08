@@ -2,14 +2,34 @@ import {Box, Divider, Grid, TextField} from "@mui/material";
 import {BlackButton} from "../Components/CustomButtons/BlackButton";
 import pinIcon from "../../images/pinIcon.png";
 import {useNavigate} from "react-router-dom";
+import {useState} from "react";
 
 export const AddItem = () => {
 
     let navigateToShowLocation = useNavigate();
+    const [backpackName, setBackpackName] = useState('');
+    const [backpackId, setBackpackId] = useState('');
+
+    const nameEventHandler = (event) => {
+        setBackpackName(event.target.value);
+    };
+
+    const idEventHandler = (event) => {
+        setBackpackId(event.target.value);
+    }
+
+    const submitHandler = (event) => {
+        event.preventDefault();
+        console.log(backpackName);
+        console.log(backpackId);
+
+        //setBackpackName('');
+        setBackpackId('');
+    }
 
     const handleShowLocation = () => {
         navigateToShowLocation('/ShowLocation');
-    }
+    };
 
     return (
         <>
@@ -35,7 +55,7 @@ export const AddItem = () => {
                         }}
                     >
                         <img src={pinIcon} alt="PinIcon" width="10%"/>
-                        <div style={{padding: '0rem 3rem', fontSize: '1.5rem', fontWeight: '500'}}>BackPack1</div>
+                        <div style={{padding: '0rem 3rem', fontSize: '1.5rem', fontWeight: '500'}}>{backpackName}</div>
                         <div>
                             <BlackButton onClick={handleShowLocation}>
                                 Show on Map
@@ -67,6 +87,8 @@ export const AddItem = () => {
                             label="Enter a name"
                             variant="outlined"
                             style={{minWidth: '17rem', marginTop: '0.5rem'}}
+                            value={backpackName}
+                            onChange={nameEventHandler}
                         />
                     </div>
                     <div style={{padding: '1rem 0rem'}}>
@@ -79,9 +101,11 @@ export const AddItem = () => {
                             variant="outlined"
                             type="password"
                             style={{minWidth: '17rem', marginTop: '0.5rem'}}
+                            value={backpackId}
+                            onChange={idEventHandler}
                         />
                     </div>
-                    <BlackButton>
+                    <BlackButton onClick={submitHandler}>
                         Add it
                     </BlackButton>
                 </Grid>

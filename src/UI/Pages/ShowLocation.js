@@ -71,6 +71,7 @@ export const ShowLocation = () => {
                       alignItems: 'center',
                       justifyContent: 'center',
                       paddingTop: '3rem',
+                      paddingRight: '2rem',
                   }}
             >
                 <LocationHandler />

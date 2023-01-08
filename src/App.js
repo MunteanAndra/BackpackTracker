@@ -7,6 +7,7 @@ import {SignUp} from "./UI/Pages/SignUp";
 import {AuthenticatedApp} from "./UI/Components/AuthenticatedApp";
 import {AddItem} from "./UI/Pages/AddItem";
 import {ShowLocation} from "./UI/Pages/ShowLocation";
+import Profile from "./UI/Pages/Profile";
 
 const App = () => {
 
@@ -31,6 +32,9 @@ const App = () => {
                 />
                 <Route path="/ShowLocation"
                        element={<ShowLocation/>}
+                />
+                <Route path="/Profile"
+                       element={<Profile/>}
                 />
             </Routes>
             <Footer/>

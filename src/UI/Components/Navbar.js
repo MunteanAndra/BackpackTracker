@@ -4,6 +4,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {Divider, Menu, MenuItem} from "@mui/material";
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import {logout} from "../../firebase";
 import {useState} from "react";
 
 export const Navbar = () => {
@@ -22,6 +23,10 @@ export const Navbar = () => {
 
     const handleRedirectHome = () => {
         navigateHome('/');
+    };
+
+    const handleRedirectProfile = () => {
+        navigateHome('/Profile');
     };
 
     return(
@@ -76,7 +81,7 @@ export const Navbar = () => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem>
+                <MenuItem onClick={handleRedirectProfile}>
                      Profile
                 </MenuItem>
                 <Divider />
@@ -84,7 +89,7 @@ export const Navbar = () => {
                     <SettingsIcon fontSize="small" style={{ marginRight: '1rem' }}/>
                     Settings
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={logout}>
                     <LogoutIcon fontSize="small" style={{ marginRight: '1rem' }}/>
                     Logout
                 </MenuItem>

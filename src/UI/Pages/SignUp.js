@@ -2,13 +2,53 @@ import {Grid, TextField} from "@mui/material";
 import {BlackButton} from "../Components/CustomButtons/BlackButton";
 import yellowBackpack from "../../images/yellowBackpack.jpg";
 import {useNavigate} from "react-router-dom";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {Link} from "react-router-dom";
+import {auth, registerWithEmailAndPassword} from "../../firebase";
+import {useEffect, useState} from "react";
 
 export const SignUp = () => {
+
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [user, loading, error] = useAuthState(auth);
 
     let navigateAuthHome = useNavigate();
 
     const handleRedirectAuthHome = () => {
         navigateAuthHome('/AuthenticatedApp');
+    };
+
+    const validatePassword = () => {
+        let isValid = false
+        if (password !== '' && email !== '' && name !== ''){
+            isValid = true;
+        } else {
+            alert('Please complete all the fields');
+        }
+        return isValid;
+    }
+
+    const register = () => {
+        if(validatePassword() === true) registerWithEmailAndPassword(name, email, password);
+    };
+
+    useEffect(() => {
+        if (loading) return;
+        if (user) handleRedirectAuthHome();
+    }, [user, loading]);
+
+    const handleNameChange = (event) => {
+        setName(event.target.value);
+    };
+
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    };
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
     };
 
     return(
@@ -34,22 +74,47 @@ export const SignUp = () => {
                         Happy to register you
                     </div>
                     <div style={{ padding: '1rem 0rem 0rem 0rem'}}>
-                        <TextField id="outlined-basic" label="Enter your name" variant="outlined" style={{minWidth: '15rem'}}/>
+                        <TextField
+                            id="outlined-basic"
+                            label="Enter your name"
+                            variant="outlined"
+                            style={{minWidth: '15rem'}}
+                            value={name}
+                            onChange={handleNameChange}
+                        />
                     </div>
                     <div style={{ padding: '1rem 0rem'}}>
-                        <TextField id="outlined-basic" label="Enter your email address" variant="outlined" style={{minWidth: '15rem'}}/>
+                        <TextField
+                            id="outlined-basic"
+                            label="Enter your email address"
+                            variant="outlined"
+                            style={{minWidth: '15rem'}}
+                            value={email}
+                            onChange={handleEmailChange}
+                        />
                     </div>
                     <div style={{ padding: '0rem 0rem 1rem 0rem' }}>
                         <div>
-                            <TextField id="outlined-basic" label="Enter your password" variant="outlined" type="password" style={{minWidth: '15rem'}}/>
+                            <TextField
+                                id="outlined-basic"
+                                label="Enter your password"
+                                variant="outlined"
+                                type="password"
+                                style={{minWidth: '15rem'}}
+                                value={password}
+                                onChange={handlePasswordChange}
+                            />
                         </div>
                         <div style={{ fontSize: '1rem', color: '#030303', fontWeight: '400', textAlign: 'right' }}>
                             *password must be at least<br />6 characters long
                         </div>
                     </div>
-                    <BlackButton onClick={handleRedirectAuthHome}>
+                    <BlackButton onClick={register}>
                         Sign up
                     </BlackButton>
+                    <div style={{paddingTop: '3rem'}}>
+                        Already have an account? <Link to="/Login">Login</Link> now.
+                    </div>
                 </Grid>
             </Grid>
         </>
