@@ -17,7 +17,7 @@ const App = () => {
                 <Route path="/"
                        element={<UnauthenticatedApp/>}
                 />
-                <Route path="/Authenticated"
+                <Route path="/AuthenticatedApp"
                        element={<AuthenticatedApp/>}
                 />
                 <Route path="/Login"

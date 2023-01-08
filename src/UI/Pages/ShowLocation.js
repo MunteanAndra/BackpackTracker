@@ -1,6 +1,7 @@
 import {Box, Grid} from "@mui/material";
 import pinIcon from "../../images/pinIcon.png";
 import {BlackButton} from "../Components/CustomButtons/BlackButton";
+import {LocationHandler} from "../Components/LocationHandler";
 
 export const ShowLocation = () => {
     return (
@@ -37,6 +38,7 @@ export const ShowLocation = () => {
                           alignItems: 'center',
                           justifyContent: 'center',
                           paddingTop: '3rem',
+                          paddingRight: '1rem',
                       }}
                 >
                     <div>
@@ -71,7 +73,7 @@ export const ShowLocation = () => {
                       paddingTop: '3rem',
                   }}
             >
-                Google Maps Api Location
+                <LocationHandler />
             </Grid>
         </Grid>
     );

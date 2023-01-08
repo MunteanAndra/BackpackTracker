@@ -8,7 +8,7 @@ export const Login = () => {
     let navigateAuthHome = useNavigate();
 
     const handleRedirectAuthHome = () => {
-        navigateAuthHome('/Authenticated');
+        navigateAuthHome('/AuthenticatedApp');
     };
 
     return (
