@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut} from "firebase/auth";
+import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail} from "firebase/auth";
 import {getFirestore, collection, addDoc} from "firebase/firestore";
 import {firebaseAPI} from "./firebaseAPI";
 
@@ -42,6 +42,16 @@ const registerWithEmailAndPassword = async (name, email, password) => {
     }
 };
 
+const sendPasswordReset = async (email) => {
+    try {
+        await sendPasswordResetEmail(auth, email);
+        alert("Password reset link sent!");
+    } catch (err) {
+        console.error(err);
+        alert(err.message);
+    }
+};
+
 const logout = () => {
     signOut(auth);
 };
@@ -51,5 +61,6 @@ export {
     db,
     logInWithEmailAndPassword,
     registerWithEmailAndPassword,
+    sendPasswordReset,
     logout,
 };

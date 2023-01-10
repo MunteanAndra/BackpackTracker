@@ -10,6 +10,7 @@ import {useState} from "react";
 export const Navbar = () => {
 
     let navigateHome = useNavigate();
+    let navigateHomeUnAuthenticated = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
@@ -28,6 +29,15 @@ export const Navbar = () => {
     const handleRedirectProfile = () => {
         navigateHome('/Profile');
     };
+
+    const handleRedirectSettings = () => {
+        navigateHome('/Settings');
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigateHomeUnAuthenticated('/Unauthenticated');
+    }
 
     return(
         <div
@@ -85,11 +95,11 @@ export const Navbar = () => {
                      Profile
                 </MenuItem>
                 <Divider />
-                <MenuItem>
+                <MenuItem onClick={handleRedirectSettings}>
                     <SettingsIcon fontSize="small" style={{ marginRight: '1rem' }}/>
                     Settings
                 </MenuItem>
-                <MenuItem onClick={logout}>
+                <MenuItem onClick={handleLogout}>
                     <LogoutIcon fontSize="small" style={{ marginRight: '1rem' }}/>
                     Logout
                 </MenuItem>

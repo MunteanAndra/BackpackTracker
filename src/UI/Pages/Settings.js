@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
-import {auth, db} from "../../firebase";
-import {query, collection, getDocs, where} from "firebase/firestore";
+import {BlackButton} from "../Components/CustomButtons/BlackButton";
+import {auth, db, sendPasswordReset} from "../../firebase";
+import {useAuthState} from "react-firebase-hooks/auth";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {collection, getDocs, query, where} from "firebase/firestore";
 import {Grid} from "@mui/material";
 
-const Profile = () => {
+
+export const Settings = () => {
 
     const [user, loading, error] = useAuthState(auth);
     const [name, setName] = useState("");
@@ -25,18 +27,26 @@ const Profile = () => {
 
     useEffect(() => {
         if (loading) return;
-        if (!user) return navigate("/Login");
+        if (!user) return navigate("/UnautheticatedApp");
         fetchUserName();
     }, [user, loading]);
 
-    return (
+    const handleResetPassword = () => {
+        sendPasswordReset(user?.email);
+    };
+
+    return(
         <Grid container style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
-                <div>Logged in as</div>
-                <div>{name}</div>
-                <div>{user?.email}</div>
+                <div style={{ marginBottom: '1.5rem'}}>
+                    Want to change your password? Reset it from here
+                </div>
+                <div>
+                    <BlackButton onClick={handleResetPassword}>
+                        Reset Password
+                    </BlackButton>
+                </div>
             </div>
         </Grid>
     );
-}
-export default Profile;
+};

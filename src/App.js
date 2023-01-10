@@ -8,6 +8,7 @@ import {AuthenticatedApp} from "./UI/Components/AuthenticatedApp";
 import {AddItem} from "./UI/Pages/AddItem";
 import {ShowLocation} from "./UI/Pages/ShowLocation";
 import Profile from "./UI/Pages/Profile";
+import {Settings} from "./UI/Pages/Settings";
 
 const App = () => {
 
@@ -35,6 +36,9 @@ const App = () => {
                 />
                 <Route path="/Profile"
                        element={<Profile/>}
+                />
+                <Route path="/Settings"
+                       element={<Settings/>}
                 />
             </Routes>
             <Footer/>
