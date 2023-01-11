@@ -6,6 +6,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {logout} from "../../firebase";
 import {useState} from "react";
+import {useDispatch} from "react-redux";
+import {logoutFromRedux} from "../../store/Auth";
 
 export const Navbar = () => {
 
@@ -13,6 +15,7 @@ export const Navbar = () => {
     let navigateHomeUnAuthenticated = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const dispatch = useDispatch();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -36,7 +39,8 @@ export const Navbar = () => {
 
     const handleLogout = () => {
         logout();
-        navigateHomeUnAuthenticated('/Unauthenticated');
+        navigateHomeUnAuthenticated('/Login');
+        dispatch(logoutFromRedux());
     }
 
     return(

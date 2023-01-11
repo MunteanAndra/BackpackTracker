@@ -6,6 +6,8 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {Link} from "react-router-dom";
 import {auth, registerWithEmailAndPassword} from "../../firebase";
 import {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {loginFromRedux} from "../../store/Auth";
 
 export const SignUp = () => {
 
@@ -15,9 +17,10 @@ export const SignUp = () => {
     const [user, loading, error] = useAuthState(auth);
 
     let navigateAuthHome = useNavigate();
+    const dispatch = useDispatch();
 
     const handleRedirectAuthHome = () => {
-        navigateAuthHome('/AuthenticatedApp');
+        navigateAuthHome('/');
     };
 
     const validatePassword = () => {
@@ -31,7 +34,10 @@ export const SignUp = () => {
     }
 
     const register = () => {
-        if(validatePassword() === true) registerWithEmailAndPassword(name, email, password);
+        if(validatePassword() === true) {
+            registerWithEmailAndPassword(name, email, password);
+            dispatch(loginFromRedux());
+        }
     };
 
     useEffect(() => {

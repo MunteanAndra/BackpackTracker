@@ -5,9 +5,12 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {auth, logInWithEmailAndPassword} from "../../firebase";
 import {useAuthState} from "react-firebase-hooks/auth";
+import {useDispatch} from "react-redux";
+import {loginFromRedux} from "../../store/Auth";
 
 export const Login = () => {
 
+    const dispatch = useDispatch();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [user, loading, error] = useAuthState(auth);
@@ -21,7 +24,7 @@ export const Login = () => {
     }, [user, loading]);
 
     const handleRedirectAuthHome = () => {
-        navigateAuthHome('/AuthenticatedApp');
+        navigateAuthHome('/');
     };
 
     const handleEmailChange = (event) => {
@@ -34,6 +37,8 @@ export const Login = () => {
 
     const handleLogin = () => {
         logInWithEmailAndPassword(email,password);
+        dispatch(loginFromRedux());
+        navigateAuthHome('/');
     }
 
     return (
@@ -90,7 +95,7 @@ export const Login = () => {
                         Log in
                     </BlackButton>
                     <div style={{paddingTop: '1rem'}}>
-                        Don't have an account? <Link to="/SignUp">SignUp</Link> now.
+                        Don't have an account? <Link to="/SignUp">Register</Link> now.
                     </div>
                 </Grid>
             </Grid>
