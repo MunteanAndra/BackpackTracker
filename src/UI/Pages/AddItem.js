@@ -2,13 +2,35 @@ import {Box, Divider, Grid, TextField} from "@mui/material";
 import {BlackButton} from "../Components/CustomButtons/BlackButton";
 import pinIcon from "../../images/pinIcon.png";
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {collection, addDoc, query, where, getDocs} from "firebase/firestore";
+import {auth, db} from '../../firebase';
+import {useAuthState} from "react-firebase-hooks/auth";
 
 export const AddItem = () => {
 
     let navigateToShowLocation = useNavigate();
+    const [user, loading, error] = useAuthState(auth);
     const [backpackName, setBackpackName] = useState('');
     const [backpackId, setBackpackId] = useState('');
+    const [ownerName, setOwnerName] = useState("");
+
+    const fetchOwnerUserName = async () => {
+        try {
+            const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+            const doc = await getDocs(q);
+            const data = doc.docs[0].data();
+            setOwnerName(data.name);
+        } catch (err) {
+            console.error(err);
+            alert("An error occured while fetching user data");
+        }
+    };
+
+    useEffect(() => {
+        if (loading) return;
+        fetchOwnerUserName();
+    }, [user, loading]);
 
     const nameEventHandler = (event) => {
         setBackpackName(event.target.value);
@@ -16,16 +38,31 @@ export const AddItem = () => {
 
     const idEventHandler = (event) => {
         setBackpackId(event.target.value);
-    }
+    };
+
+    const addBackpack = async () => {
+
+        try {
+            const docRef = await addDoc(collection(db, "backpacks"), {
+                backpackName: backpackName,
+                backpackId: backpackId,
+                backpackOwner: ownerName,
+            });
+            console.log("Document written with ID: ", docRef.id);
+        } catch (err) {
+            console.error("Error adding document: ", err);
+        }
+    };
 
     const submitHandler = (event) => {
         event.preventDefault();
         console.log(backpackName);
         console.log(backpackId);
+        addBackpack();
 
         //setBackpackName('');
-        setBackpackId('');
-    }
+        //setBackpackId('');
+    };
 
     const handleShowLocation = () => {
         navigateToShowLocation('/ShowLocation');
@@ -99,7 +136,6 @@ export const AddItem = () => {
                             id="outlined-basic"
                             label="Enter your backpack's given ID"
                             variant="outlined"
-                            type="password"
                             style={{minWidth: '17rem', marginTop: '0.5rem'}}
                             value={backpackId}
                             onChange={idEventHandler}
