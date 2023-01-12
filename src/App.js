@@ -24,7 +24,7 @@ export const App = () => {
             dispatch(loginFromRedux());
         } else {
             if (!storeAuth) {
-                navigate('/Login');
+                navigate('/UnauthenticatedApp');
             }
         }
 
@@ -50,8 +50,8 @@ export const App = () => {
                     <Route path="/Settings"
                            element={<Settings/>}
                     />
-                    <Route path="/UnauthenticatedApp"
-                           element={<UnauthenticatedApp/>}
+                    <Route path="/Login"
+                           element={<Login/>}
                     />
                     <Route path="/SignUp"
                            element={<SignUp/>}
@@ -59,8 +59,8 @@ export const App = () => {
                 </Routes>
             ) : (
                 <Routes>
-                    <Route path="/Login"
-                           element={<Login/>}
+                    <Route path="/UnauthenticatedApp"
+                           element={<UnauthenticatedApp/>}
                     />
                 </Routes>
             )}

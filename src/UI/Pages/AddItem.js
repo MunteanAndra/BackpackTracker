@@ -42,11 +42,13 @@ export const AddItem = () => {
         }
     };
 
+    let backPacksAdded = [] ;
+
     const fetchPost = async () => {
 
         await getDocs(collection(db, "backpacks"))
             .then((data) => {
-                const backPacksAdded = data.docs.map((doc) => ({...doc.data(), id: doc.id,}));
+                backPacksAdded = data.docs.map((doc) => ({...doc.data(), id: doc.id,}));
                 setBackPacksFromAdded(backPacksAdded);
                 console.log(backPacksFromAdded, backPacksAdded);
             })
@@ -92,7 +94,7 @@ export const AddItem = () => {
                           paddingLeft: '3rem',
                       }}
                 >
-                    { backPacksFromAdded.length ? backPacksFromAdded.map((backpack) => {
+                    {backPacksAdded.length ? backPacksAdded.map((backpack) => {
                             <Box
                                 border={1}
                                 style={{
@@ -108,7 +110,7 @@ export const AddItem = () => {
                                     padding: '0rem 3rem',
                                     fontSize: '1.5rem',
                                     fontWeight: '500'
-                                }}>{backpack.backpackName}</div>
+                                }}>{backpackName}</div>
                                 <div>
                                     <BlackButton onClick={handleShowLocation}>
                                         Show on Map
@@ -118,7 +120,7 @@ export const AddItem = () => {
                                     </BlackButton>
                                 </div>
                             </Box>
-                    }) :
+                        }) :
                         <Box
                             border={1}
                             style={{
@@ -134,7 +136,7 @@ export const AddItem = () => {
                                 padding: '0rem 3rem',
                                 fontSize: '1.5rem',
                                 fontWeight: '500'
-                            }}>{backpackName}</div>
+                            }}>Backpack1</div>
                             <div>
                                 <BlackButton onClick={handleShowLocation}>
                                     Show on Map

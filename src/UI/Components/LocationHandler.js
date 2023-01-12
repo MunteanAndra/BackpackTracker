@@ -1,6 +1,8 @@
 import {GoogleMap, useJsApiLoader, Marker} from '@react-google-maps/api';
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {GOOGLE_API_KEY} from "../../mapsAPI";
+import {collection, getDocs} from "firebase/firestore";
+import {db} from "../../firebase";
 
 /*import Geocoder from "react-geocode";
 
@@ -29,12 +31,27 @@ const gpsLocation = {
 };
 
 export const LocationHandler = () => {
+
+    const [coordinates, setCoordinates] = useState([]);
+    const [map, setMap] = useState(null);
+
+    useEffect(() => {
+        fetchLocation();
+    }, []);
+
+    const fetchLocation = async () => {
+        await getDocs(collection(db, "coordinates"))
+            .then((data) => {
+                const coordinatesFromDb = data.docs.map((doc) => ({...doc.data(), id: doc.id,}));
+                setCoordinates(coordinatesFromDb);
+                console.log(coordinates, coordinatesFromDb);
+            })
+    }
+
     const {isLoaded} = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: GOOGLE_API_KEY
     })
-
-    const [map, setMap] = useState(null);
 
     const onLoad = useCallback(function callback(map) {
         const bounds = new window.google.maps.LatLngBounds(gpsLocation);
