@@ -13,7 +13,8 @@ export const AddItem = () => {
     const [user, loading, error] = useAuthState(auth);
     const [backpackName, setBackpackName] = useState('');
     const [backpackId, setBackpackId] = useState('');
-    const [ownerName, setOwnerName] = useState("");
+    const [ownerName, setOwnerName] = useState('');
+    const [backPacksFromAdded, setBackPacksFromAdded] = useState([]);
 
     const fetchOwnerUserName = async () => {
         try {
@@ -25,19 +26,6 @@ export const AddItem = () => {
             console.error(err);
             alert("An error occured while fetching user data");
         }
-    };
-
-    useEffect(() => {
-        if (loading) return;
-        fetchOwnerUserName();
-    }, [user, loading]);
-
-    const nameEventHandler = (event) => {
-        setBackpackName(event.target.value);
-    };
-
-    const idEventHandler = (event) => {
-        setBackpackId(event.target.value);
     };
 
     const addBackpack = async () => {
@@ -54,14 +42,37 @@ export const AddItem = () => {
         }
     };
 
+    const fetchPost = async () => {
+
+        await getDocs(collection(db, "backpacks"))
+            .then((data) => {
+                const backPacksAdded = data.docs.map((doc) => ({...doc.data(), id: doc.id,}));
+                setBackPacksFromAdded(backPacksAdded);
+                console.log(backPacksFromAdded, backPacksAdded);
+            })
+
+    }
+
+    useEffect(() => {
+        if (loading) return;
+        fetchPost();
+        fetchOwnerUserName();
+    }, [user, loading]);
+
+    const nameEventHandler = (event) => {
+        setBackpackName(event.target.value);
+    };
+
+    const idEventHandler = (event) => {
+        setBackpackId(event.target.value);
+    };
+
     const submitHandler = (event) => {
         event.preventDefault();
-        console.log(backpackName);
-        console.log(backpackId);
         addBackpack();
 
-        //setBackpackName('');
-        //setBackpackId('');
+        setBackpackName('');
+        setBackpackId('');
     };
 
     const handleShowLocation = () => {
@@ -81,27 +92,59 @@ export const AddItem = () => {
                           paddingLeft: '3rem',
                       }}
                 >
-                    <Box
-                        border={1}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '3rem',
-                        }}
-                    >
-                        <img src={pinIcon} alt="PinIcon" width="10%"/>
-                        <div style={{padding: '0rem 3rem', fontSize: '1.5rem', fontWeight: '500'}}>{backpackName}</div>
-                        <div>
-                            <BlackButton onClick={handleShowLocation}>
-                                Show on Map
-                            </BlackButton>
-                            <BlackButton style={{ marginTop: '0.5rem' }}>
-                                Delete
-                            </BlackButton>
-                        </div>
-                    </Box>
+                    { backPacksFromAdded.length ? backPacksFromAdded.map((backpack) => {
+                            <Box
+                                border={1}
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    padding: '3rem',
+                                }}
+                            >
+                                <img src={pinIcon} alt="PinIcon" width="10%"/>
+                                <div style={{
+                                    padding: '0rem 3rem',
+                                    fontSize: '1.5rem',
+                                    fontWeight: '500'
+                                }}>{backpack.backpackName}</div>
+                                <div>
+                                    <BlackButton onClick={handleShowLocation}>
+                                        Show on Map
+                                    </BlackButton>
+                                    <BlackButton style={{marginTop: '0.5rem'}}>
+                                        Delete
+                                    </BlackButton>
+                                </div>
+                            </Box>
+                    }) :
+                        <Box
+                            border={1}
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                padding: '3rem',
+                            }}
+                        >
+                            <img src={pinIcon} alt="PinIcon" width="10%"/>
+                            <div style={{
+                                padding: '0rem 3rem',
+                                fontSize: '1.5rem',
+                                fontWeight: '500'
+                            }}>{backpackName}</div>
+                            <div>
+                                <BlackButton onClick={handleShowLocation}>
+                                    Show on Map
+                                </BlackButton>
+                                <BlackButton style={{marginTop: '0.5rem'}}>
+                                    Delete
+                                </BlackButton>
+                            </div>
+                        </Box>
+                    }
                 </Grid>
                 <Grid item xs={1}>
                     <Divider orientation="vertical" flexItem style={{height: '60vh'}}/>
@@ -149,3 +192,4 @@ export const AddItem = () => {
         </>
     );
 };
+
