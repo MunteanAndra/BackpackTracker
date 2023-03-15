@@ -33,7 +33,7 @@ export const App = () => {
     return (
         <div className="App">
             <Navbar/>
-            { storeAuth ? (
+            {/*{ storeAuth ? (
                 <Routes>
                     <Route path="/"
                            element={<AuthenticatedApp/>}
@@ -63,7 +63,33 @@ export const App = () => {
                            element={<UnauthenticatedApp/>}
                     />
                 </Routes>
-            )}
+            )}*/}
+            <Routes>
+                <Route path="/"
+                       element={<AuthenticatedApp/>}
+                />
+                <Route path="/AddItem"
+                       element={<AddItem/>}
+                />
+                <Route path="/ShowLocation"
+                       element={<ShowLocation/>}
+                />
+                <Route path="/Profile"
+                       element={<Profile/>}
+                />
+                <Route path="/Settings"
+                       element={<Settings/>}
+                />
+                <Route path="/Login"
+                       element={<Login/>}
+                />
+                <Route path="/SignUp"
+                       element={<SignUp/>}
+                />
+                <Route path="/UnauthenticatedApp"
+                       element={<UnauthenticatedApp/>}
+                />
+            </Routes>
             <Footer/>
         </div>
     );
