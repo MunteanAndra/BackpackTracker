@@ -4,6 +4,7 @@ import {AddButton} from "./CustomButtons/AddButton";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import pinIcon from "../../images/pinIcon.png";
 import {useNavigate} from "react-router-dom";
+import SideMenu from "./Drawer/SideMenu";
 
 export const AuthenticatedApp = () => {
 
@@ -20,6 +21,9 @@ export const AuthenticatedApp = () => {
 
     return(
         <Grid container style={{padding: '4rem 0rem'}}>
+            <Grid item xs={12}>
+                <SideMenu />
+            </Grid>
             <Grid item
                   xs={12}
                   style={{
