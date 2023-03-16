@@ -16,7 +16,7 @@ const SideMenu = (props) => {
     };
 
     const drawer = (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <List>
                 {['Gaseste locatia', 'Obiectele din rucsac', 'Pozitia corecta'].map((text) => (
                     <ListItem key={text} disablePadding>
@@ -38,9 +38,9 @@ const SideMenu = (props) => {
                 aria-label="open drawer"
                 edge="start"
                 onClick={handleDrawerToggle}
-                sx={{ mr: 2, display: { sm: 'none' } }}
+                sx={{mr: 2, display: {md: 'none'}}}
             >
-                <MenuIcon />
+                <MenuIcon/>
             </IconButton>
             <Drawer
                 container={container}
@@ -51,7 +51,7 @@ const SideMenu = (props) => {
                     keepMounted: true,
                 }}
                 sx={{
-                    display: {xs: 'block', sm: 'none'},
+                    display: {xs: 'block', sm: 'block', md: 'none'},
                     '& .MuiDrawer-paper': {
                         boxSizing: 'border-box',
                         height: 'calc(100vh - 20rem)',
@@ -70,7 +70,7 @@ const SideMenu = (props) => {
             <Drawer
                 variant="permanent"
                 sx={{
-                    display: {xs: 'none', sm: 'block'},
+                    display: {xs: 'none', sm: 'none', md: 'block'},
                     '& .MuiDrawer-paper': {
                         boxSizing: 'border-box',
                         height: 'calc(100vh - 20rem)',
