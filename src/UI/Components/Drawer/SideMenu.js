@@ -18,7 +18,7 @@ const SideMenu = (props) => {
     const drawer = (
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <List>
-                {['Gaseste locatia', 'Obiectele din rucsac', 'Pozitia corecta'].map((text) => (
+                {['Find its location', 'Items that are inside', 'Proper wear position'].map((text) => (
                     <ListItem key={text} disablePadding>
                         <ListItemButton>
                             <ListItemText primary={text}/>

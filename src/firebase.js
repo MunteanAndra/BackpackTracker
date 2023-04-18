@@ -1,21 +1,23 @@
 import { initializeApp } from "firebase/app";
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail} from "firebase/auth";
-import {getFirestore, collection, addDoc} from "firebase/firestore";
-import {firebaseAPI} from "./firebaseAPI";
+import {collection, addDoc} from "firebase/firestore";
+import {getDatabase} from "firebase/database";
 
 const firebaseConfig = {
-    apiKey: firebaseAPI,
-    authDomain: "backpack-c5a4a.firebaseapp.com",
-    projectId: "backpack-c5a4a",
-    storageBucket: "backpack-c5a4a.appspot.com",
-    messagingSenderId: "263699171592",
-    appId: "1:263699171592:web:17912bd2d688322dae84bd",
-    measurementId: "G-EJMH0GZPP5"
+    apiKey: "AIzaSyDerJ4NN2T3YTwNetAAGHELBSpdX1CAgtU",
+    authDomain: "smart-backpack-f2e6f.firebaseapp.com",
+    databaseURL: "https://smart-backpack-f2e6f-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "smart-backpack-f2e6f",
+    storageBucket: "smart-backpack-f2e6f.appspot.com",
+    messagingSenderId: "1088956308975",
+    appId: "1:1088956308975:web:f9885ba156a4466c1cea1a",
+    measurementId: "G-R71JLTGG68"
 };
 
 const app = initializeApp(firebaseConfig);
+export const db = getDatabase(app);
+
 const auth = getAuth(app);
-const db = getFirestore(app);
 
 const logInWithEmailAndPassword = async (email, password) => {
     try {
@@ -58,7 +60,6 @@ const logout = () => {
 
 export {
     auth,
-    db,
     logInWithEmailAndPassword,
     registerWithEmailAndPassword,
     sendPasswordReset,

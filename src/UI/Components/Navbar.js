@@ -51,6 +51,7 @@ export const Navbar = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 paddingRight: '2rem',
+                paddingBottom: '2rem',
             }}
         >
             <img src={logo} alt="logo" onClick={handleRedirectHome}/>

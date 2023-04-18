@@ -5,11 +5,27 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import pinIcon from "../../images/pinIcon.png";
 import {useNavigate} from "react-router-dom";
 import SideMenu from "./Drawer/SideMenu";
+import {useEffect, useState} from "react";
+import {onValue, ref} from "firebase/database";
+import {db} from "../../firebase";
 
 export const AuthenticatedApp = () => {
 
     let navigateToAddItem = useNavigate();
     let navigateToShowLocation = useNavigate();
+    const [backpacks, setBackpacks] = useState([]);
+
+    useEffect(() => {
+        onValue(ref(db), (snapshot) => {
+            setBackpacks([]);
+            const data = snapshot.val();
+            if (data !== null) {
+                Object.values(data).map(backpack => {
+                    setBackpacks((oldArray) => [...oldArray, backpack]);
+                });
+            }
+        });
+    }, []);
 
     const handleAddItem = () => {
         navigateToAddItem('/AddItem');
@@ -50,13 +66,16 @@ export const AuthenticatedApp = () => {
                       paddingTop: '3rem',
                   }}
             >
-                <Box border={1} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3rem', width: '40%' }}>
+                {backpacks.map((backpack) => (
+                <Box border={1} key={backpack.backpack_name} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3rem', width: '40%', marginBottom: '1rem' }}>
                     <img src={pinIcon} alt="PinIcon" width="10%"/>
-                    <div style={{padding: '0rem 3rem', fontSize: '1.5rem', fontWeight: '500'}} >BackPack1</div>
+                    <div style={{padding: '0rem 3rem', fontSize: '1.5rem', fontWeight: '500'}}>
+                        {backpack.backpack_name}
+                    </div>
                     <BlackButton onClick={handleShowLocation}>
                         Show on Map
                     </BlackButton>
-                </Box>
+                </Box>))}
             </Grid>
             <Grid item
                   xs={12}
