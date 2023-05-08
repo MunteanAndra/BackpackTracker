@@ -6,25 +6,39 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import {IconButton} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
+import {useNavigate} from "react-router-dom";
 
 const SideMenu = (props) => {
     const {window} = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
+    let navigateToShowItems = useNavigate();
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
+    const handleItems = () => {
+        navigateToShowItems('/Items');
+    };
+
     const drawer = (
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <List>
-                {['Find its location', 'Items that are inside', 'Proper wear position'].map((text) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemText primary={text}/>
-                        </ListItemButton>
-                    </ListItem>
-                ))}
+                <ListItem key={'Find its location'} disablePadding>
+                    <ListItemButton>
+                        <ListItemText primary={'Find its location'}/>
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={'Items that are inside'} disablePadding>
+                    <ListItemButton onClick={handleItems}>
+                        <ListItemText primary={'Items that are inside'}/>
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={'Proper wear position'} disablePadding>
+                    <ListItemButton>
+                        <ListItemText primary={'Proper wear position'}/>
+                    </ListItemButton>
+                </ListItem>
             </List>
         </div>
     );

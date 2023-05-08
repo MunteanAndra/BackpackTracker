@@ -12,6 +12,7 @@ import {Settings} from "./UI/Pages/Settings";
 import {useDispatch, useSelector} from 'react-redux';
 import {authSelector, loginFromRedux} from "./store/Auth";
 import {useEffect} from "react";
+import {Items} from "./UI/Components/Items";
 
 export const App = () => {
 
@@ -79,6 +80,9 @@ export const App = () => {
                 />
                 <Route path="/Settings"
                        element={<Settings/>}
+                />
+                <Route path="/Items"
+                       element={<Items/>}
                 />
                 <Route path="/Login"
                        element={<Login/>}
