@@ -13,6 +13,7 @@ const SideMenu = (props) => {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     let navigateToShowItems = useNavigate();
     let navigateToShowCorrectPosition = useNavigate();
+    let navigateToShowLocation = useNavigate();
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -26,11 +27,15 @@ const SideMenu = (props) => {
         navigateToShowCorrectPosition('/Position');
     };
 
+    const handleLocation = () => {
+        navigateToShowLocation('/ShowLocation');
+    };
+
     const drawer = (
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <List>
                 <ListItem key={'Find its location'} disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={handleLocation}>
                         <ListItemText primary={'Find its location'}/>
                     </ListItemButton>
                 </ListItem>

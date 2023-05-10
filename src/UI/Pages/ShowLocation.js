@@ -6,7 +6,7 @@ import {LocationHandler} from "../Components/LocationHandler";
 export const ShowLocation = () => {
     return (
         <Grid container>
-            <Grid item xs={4}>
+            <Grid item xs={4} style={{ display: 'flex', flexDirection: 'column'}}>
                 <Grid item
                       xs={12}
                       style={{
@@ -38,12 +38,11 @@ export const ShowLocation = () => {
                           alignItems: 'center',
                           justifyContent: 'center',
                           paddingTop: '3rem',
-                          paddingRight: '1rem',
                       }}
                 >
-                    <div>
-                        Location Message
-                    </div>
+                    <BlackButton>
+                        See Alert
+                    </BlackButton>
                 </Grid>
                 <Grid item
                       xs={12}
@@ -52,15 +51,11 @@ export const ShowLocation = () => {
                           flexDirection: 'column',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          paddingTop: '3rem',
                       }}
                 >
-                    <BlackButton>
-                        See Alert
-                    </BlackButton>
-                    <BlackButton style={{marginTop: '1rem'}}>
-                        Delete
-                    </BlackButton>
+                    <div>
+                        Location Message
+                    </div>
                 </Grid>
             </Grid>
             <Grid item
@@ -72,6 +67,7 @@ export const ShowLocation = () => {
                       justifyContent: 'center',
                       paddingTop: '3rem',
                       paddingRight: '2rem',
+                      height: '30rem',
                   }}
             >
                 <LocationHandler />
