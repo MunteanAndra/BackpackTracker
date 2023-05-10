@@ -12,6 +12,7 @@ const SideMenu = (props) => {
     const {window} = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
     let navigateToShowItems = useNavigate();
+    let navigateToShowCorrectPosition = useNavigate();
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -19,6 +20,10 @@ const SideMenu = (props) => {
 
     const handleItems = () => {
         navigateToShowItems('/Items');
+    };
+
+    const handlePressure = () => {
+        navigateToShowCorrectPosition('/Position');
     };
 
     const drawer = (
@@ -35,7 +40,7 @@ const SideMenu = (props) => {
                     </ListItemButton>
                 </ListItem>
                 <ListItem key={'Proper wear position'} disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={handlePressure}>
                         <ListItemText primary={'Proper wear position'}/>
                     </ListItemButton>
                 </ListItem>

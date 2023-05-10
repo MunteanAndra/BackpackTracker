@@ -13,6 +13,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {authSelector, loginFromRedux} from "./store/Auth";
 import {useEffect} from "react";
 import {Items} from "./UI/Components/Items";
+import {Position} from "./UI/Pages/Position";
 
 export const App = () => {
 
@@ -83,6 +84,9 @@ export const App = () => {
                 />
                 <Route path="/Items"
                        element={<Items/>}
+                />
+                <Route path="/Position"
+                       element={<Position/>}
                 />
                 <Route path="/Login"
                        element={<Login/>}
