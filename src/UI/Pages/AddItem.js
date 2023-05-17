@@ -15,7 +15,7 @@ export const AddItem = () => {
     const [backpacks, setBackpacks] = useState([]);
 
     useEffect(() => {
-        onValue(ref(db), (snapshot) => {
+        onValue(ref(db, '/backpacks'), (snapshot) => {
             setBackpacks([]);
             const data = snapshot.val();
             if (data !== null) {
@@ -28,7 +28,7 @@ export const AddItem = () => {
 
     const addBackpackToDatabase = () => {
         const uuid = uid();
-        set(ref(db, `/${uuid}`), {
+        set(ref(db, `/backpacks/${uuid}`), {
             backpack_name: backpackName,
             backpack_id: backpackId,
             uuid,
@@ -36,7 +36,7 @@ export const AddItem = () => {
     };
 
     const handleDelete = (backpack) => {
-        remove(ref(db, `/${backpack.uuid}`));
+        remove(ref(db, `/backpacks/${backpack.uuid}`));
     };
 
     const nameEventHandler = (event) => {

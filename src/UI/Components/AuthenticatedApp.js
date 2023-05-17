@@ -16,7 +16,7 @@ export const AuthenticatedApp = () => {
     const [backpacks, setBackpacks] = useState([]);
 
     useEffect(() => {
-        onValue(ref(db), (snapshot) => {
+        onValue(ref(db, '/backpacks'), (snapshot) => {
             setBackpacks([]);
             const data = snapshot.val();
             if (data !== null) {
