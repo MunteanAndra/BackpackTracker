@@ -12,7 +12,7 @@ import {Settings} from "./UI/Pages/Settings";
 import {useDispatch, useSelector} from 'react-redux';
 import {authSelector, loginFromRedux} from "./store/Auth";
 import {useEffect} from "react";
-import {Items} from "./UI/Components/Items";
+import {Items} from "./UI/Pages/Items";
 import {Position} from "./UI/Pages/Position";
 
 export const App = () => {
