@@ -12,4 +12,8 @@ export const BlackButton = styled(Button)(() => ({
         backgroundColor: '#fff',
         color: '#030303',
     },
+    '&:disabled': {
+        backgroundColor: '#808080',
+        color: '#fff',
+    },
 }));
