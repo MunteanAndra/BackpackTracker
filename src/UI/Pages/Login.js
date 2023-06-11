@@ -1,102 +1,162 @@
-import {Grid, Link, TextField} from "@mui/material";
-import mobileGoogleMaps from '../../images/mobileGoogleMaps.jpg';
+import {Alert, Collapse, Grid, Hidden, TextField} from "@mui/material";
 import {BlackButton} from "../Components/CustomButtons/BlackButton";
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {auth, logInWithEmailAndPassword} from "../../firebase";
-import {useAuthState} from "react-firebase-hooks/auth";
-import {useDispatch} from "react-redux";
+import {useState} from "react";
+import {auth} from "../../firebase";
+import loginBackpack from "../../images/login_backpack.png";
+import yellowBackpack from "../../images/yellowBackpack.jpg";
+import {RecaptchaVerifier, signInWithPhoneNumber} from "firebase/auth";
 import {loginFromRedux} from "../../store/Auth";
+import {useDispatch} from "react-redux";
 
 export const Login = () => {
-
-    const dispatch = useDispatch();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [user, loading, error] = useAuthState(auth);
     let navigateAuthHome = useNavigate();
-
-    useEffect(() => {
-        if (loading) {
-            return;
-        }
-        if (user) handleRedirectAuthHome();
-    }, [user, loading]);
+    const dispatch = useDispatch();
+    const [phoneNumber, setPhoneNumber] = useState('+40');
+    const [verificationCode, setVerificationCode] = useState('');
+    const [show, setShow] = useState(false);
+    const [openAlert, setOpenAlert] = useState(false);
 
     const handleRedirectAuthHome = () => {
         navigateAuthHome('/');
     };
 
-    const handleEmailChange = (event) => {
-       setEmail(event.target.value);
+    const handleNumberChange = (event) => {
+        event.preventDefault();
+        setPhoneNumber(event.target.value);
     };
 
-    const handlePasswordChange = (event) => {
-        setPassword(event.target.value);
+    const handleCodeChange = (event) => {
+        event.preventDefault();
+        setVerificationCode(event.target.value);
     };
 
-    const handleLogin = () => {
-        logInWithEmailAndPassword(email,password);
-        dispatch(loginFromRedux());
-        navigateAuthHome('/');
-    }
+    const generateReCaptcha = () => {
+        const recaptchaContainer = document.getElementById('recaptcha-container');
+        window.recaptchaVerifier = new RecaptchaVerifier(recaptchaContainer, {
+            size: 'invisible',
+            callback: () => {
+                onLogInSubmit();
+                console.log("reCAPTCHA verified");
+            },
+        }, auth);
+    };
+
+    const onLogInSubmit = () => {
+        generateReCaptcha();
+        console.log(phoneNumber);
+        const appVerifier = window.recaptchaVerifier;
+        signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+            .then((confirmationResult) => {
+                // SMS sent. Prompt user to type the code from the message, then sign the
+                // user in with confirmationResult.confirm(code).
+                window.confirmationResult = confirmationResult;
+                setShow(true);
+                console.log("Code has been sent");
+            }).catch((error) => {
+            console.log(error, "SMS not sent");
+        });
+    };
+
+    const onSubmitOTP = () => {
+        window.confirmationResult.confirm(verificationCode).then(() => {
+            handleRedirectAuthHome();
+            dispatch(loginFromRedux(true));
+            localStorage.setItem("token", "1234567");
+        }).catch((error) => {
+            setOpenAlert(true);
+            console.log(error, "User couldn't sign in");
+        });
+    };
 
     return (
         <>
-            <Grid container>
-                <Grid item
-                      xs={6}
-                      style={{
-                          width: '20rem',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                      }}
-                >
-                    <div style={{paddingLeft: '2rem'}}>
-                        <img src={mobileGoogleMaps} alt="MobileMaps" width="100%"/>
-                    </div>
-                </Grid>
-                <Grid item
-                      xs={6}
-                      style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                      }}
+
+            <Grid container justifyContent="center">
+                <Hidden only={['xs','sm']}>
+                    <Grid
+                        item
+                        xs={6}
+                        style={{
+                            width: '20rem',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <div style={{paddingLeft: '2rem'}}>
+                            <img src={yellowBackpack} alt="yellowBackpack" width="100%"/>
+                        </div>
+                    </Grid>
+                </Hidden>
+                <Hidden only={['md','lg','xl']}>
+                    <Grid
+                        item
+                        xs={12} md={6}
+                        style={{
+                            width: '20rem',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginBottom: '2rem',
+                        }}
+                    >
+                        <img src={loginBackpack} alt="loginBackpack" width="40%"/>
+                    </Grid>
+                </Hidden>
+                <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
                 >
                     <div style={{fontWeight: '500', fontSize: '1.5rem'}}>
-                        Welcome Back
+                        Welcome!
                     </div>
-                    <div style={{padding: '1rem 0rem 0rem 0rem'}}>
-                        <TextField
-                            id="outlined-basic"
-                            label="Enter your email address"
-                            variant="outlined"
-                            value={email}
-                            onChange={handleEmailChange}
-                            style={{minWidth: '15rem'}}
-                        />
-                    </div>
-                    <div style={{padding: '1rem 0rem'}}>
-                        <TextField
-                            id="outlined-basic"
-                            label="Enter your password"
-                            variant="outlined"
-                            type="password"
-                            value={password}
-                            onChange={handlePasswordChange}
-                            style={{minWidth: '15rem'}}
-                        />
-                    </div>
-                    <BlackButton onClick={handleLogin}>
-                        Log in
-                    </BlackButton>
-                    <div style={{paddingTop: '1rem'}}>
-                        Don't have an account? <Link to="/SignUp">Register</Link> now.
-                    </div>
+                    <div id="recaptcha-container"></div>
+                    {show ? (
+                        <>
+                            <div style={{padding: '1.5rem 0rem'}}>
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Enter verification code"
+                                    variant="outlined"
+                                    value={verificationCode}
+                                    onChange={handleCodeChange}
+                                    style={{minWidth: '15rem'}}
+                                />
+                            </div>
+                            <BlackButton onClick={onSubmitOTP} disabled={!verificationCode} style={{ marginBottom: '2rem' }}>
+                                Log in
+                            </BlackButton>
+                            <Collapse in={openAlert}>
+                                <Alert severity="warning"> Verification code is incorrect </Alert>
+                            </Collapse>
+                        </>
+                    ) : (
+                        <>
+                            <div style={{padding: '1.5rem 0rem'}}>
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Enter your phone number"
+                                    variant="outlined"
+                                    value={phoneNumber}
+                                    onChange={handleNumberChange}
+                                    style={{minWidth: '15rem'}}
+                                />
+                            </div>
+                            <BlackButton onClick={onLogInSubmit}>
+                                Send message
+                            </BlackButton>
+                        </>
+                    )}
                 </Grid>
             </Grid>
         </>

@@ -1,22 +1,21 @@
 import logo from '../../images/logo.png';
 import {useNavigate} from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import {Divider, Menu, MenuItem} from "@mui/material";
-import SettingsIcon from '@mui/icons-material/Settings';
+import {Divider, Hidden, Menu, MenuItem} from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import {logout} from "../../firebase";
 import {useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {authSelector, logoutFromRedux} from "../../store/Auth";
+import {useDispatch} from "react-redux";
+import {logoutFromRedux} from "../../store/Auth";
 
-export const Navbar = () => {
+export const Navbar = ({loggedIn}) => {
 
     let navigateHome = useNavigate();
     let navigateHomeUnAuthenticated = useNavigate();
-    const storeAuth = useSelector(state => authSelector(state));
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const dispatch = useDispatch();
+
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -27,6 +26,7 @@ export const Navbar = () => {
     };
 
     const handleRedirectHome = () => {
+        if(loggedIn === true)
         navigateHome('/');
     };
 
@@ -34,13 +34,10 @@ export const Navbar = () => {
         navigateHome('/Profile');
     };
 
-    const handleRedirectSettings = () => {
-        navigateHome('/Settings');
-    };
-
     const handleLogout = () => {
         logout();
         navigateHomeUnAuthenticated('/Login');
+        localStorage.setItem("token", "");
         dispatch(logoutFromRedux());
     }
 
@@ -54,8 +51,13 @@ export const Navbar = () => {
                 paddingBottom: '2rem',
             }}
         >
-            <img src={logo} alt="logo" onClick={handleRedirectHome}/>
-            { storeAuth ? (
+            <Hidden only={['md','lg','xl']}>
+                <img src={logo} alt="logo" onClick={handleRedirectHome} width="80%"/>
+            </Hidden>
+            <Hidden only={['xs','sm']}>
+                <img src={logo} alt="logo" onClick={handleRedirectHome}/>
+            </Hidden>
+            {loggedIn ? (
                 <>
                     <AccountCircleIcon
                         fontSize='large'
@@ -100,22 +102,16 @@ export const Navbar = () => {
                         anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                     >
                         <MenuItem onClick={handleRedirectProfile}>
-                            Profile
+                            Overview
                         </MenuItem>
                         <Divider/>
-                        <MenuItem onClick={handleRedirectSettings}>
-                            <SettingsIcon fontSize="small" style={{marginRight: '1rem'}}/>
-                            Settings
-                        </MenuItem>
                         <MenuItem onClick={handleLogout}>
                             <LogoutIcon fontSize="small" style={{marginRight: '1rem'}}/>
                             Logout
                         </MenuItem>
                     </Menu>
                 </>
-            ) : (
-                <div/>
-            )}
+            ) : null}
         </div>
 
     );

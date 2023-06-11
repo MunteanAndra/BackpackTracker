@@ -64,7 +64,7 @@ const SideMenu = (props) => {
                 onClick={handleDrawerToggle}
                 sx={{mr: 2, display: {md: 'none'}}}
             >
-                <MenuIcon/>
+                <MenuIcon style={{marginLeft: '1rem'}}/>
             </IconButton>
             <Drawer
                 container={container}

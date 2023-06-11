@@ -1,4 +1,7 @@
-import {Grid} from "@mui/material";
+import {
+    Grid,
+    Hidden,
+} from "@mui/material";
 import {useEffect, useState} from "react";
 import {onValue, ref} from "firebase/database";
 import {db} from "../../firebase";
@@ -67,7 +70,7 @@ export const Position = () => {
 
     if (leftStrapPressure === rightStrapPressure) {
         secondMessage = '';
-    } else if ( leftStrapPressure < rightStrapPressure) {
+    } else if (leftStrapPressure < rightStrapPressure) {
         secondMessage = 'You might consider readjusting your right strap.';
         decideStrap = 'true';
     } else {
@@ -77,88 +80,130 @@ export const Position = () => {
 
     if (frontPressure === backPressure) {
         thirdMessage = '';
-    } else if ( frontPressure < backPressure) {
+    } else if (frontPressure < backPressure) {
         thirdMessage = 'And you might also readjust your straps to the front because there is too much pressure on your back.';
     } else {
         thirdMessage = 'And you might also readjust your straps to the back because there is too much pressure on the front.';
     }
 
     return (
-        <Grid container>
-            <Grid item xs={12} md={5}>
-                <img src={strapsBackpack} alt={"backpack"}/>
-            </Grid>
-            <Grid item xs={12} md={7}
-                  style={{
-                      padding: '0rem 3rem',
-                      fontSize: '1.5rem',
-                      fontWeight: '500',
-                      display: 'flex',
-                      alignItems: 'center',
-                      flexDirection: 'column',
-                  }}
-            >
-                <Grid item xs={12}>
-                    {message}
-                    <br></br>
-                    <br></br>
-                    {secondMessage}
-                    <br></br>
-                    <br></br>
-                    {thirdMessage}
+        <>
+            <Hidden only={['xs', 'sm']}>
+                <Grid container>
+                    <Grid item xs={12} md={5}>
+                        <img src={strapsBackpack} alt={"backpack"}/>
+                    </Grid>
+                    <Grid item xs={12} md={7}
+                          style={{
+                              padding: '0rem 3rem',
+                              fontSize: '1.5rem',
+                              fontWeight: '500',
+                              display: 'flex',
+                              alignItems: 'center',
+                              flexDirection: 'column',
+                          }}
+                    >
+                        <Grid item xs={12}>
+                            {message}
+                            <br></br>
+                            <br></br>
+                            {secondMessage}
+                            <br></br>
+                            <br></br>
+                            {thirdMessage}
+                        </Grid>
+                        <Grid item xs={12}>
+                            {decideStrap ? <img src={rightStrap} alt="rightStrap" /> : <img src={leftStrap} alt="leftStrap" />}
+                        </Grid>
+                    </Grid>
+                    <Grid item
+                          xs={12}
+                          style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              paddingLeft: '3rem',
+                          }}
+                    >
+                        <div
+                            style={{
+                                padding: '0rem 3rem',
+                                fontSize: '1.5rem',
+                                fontWeight: '500'
+                            }}
+                        >
+                            {sensor1}
+                        </div>
+                        <div
+                            style={{
+                                padding: '0rem 3rem',
+                                fontSize: '1.5rem',
+                                fontWeight: '500'
+                            }}
+                        >
+                            {sensor2}
+                        </div>
+                        <div
+                            style={{
+                                padding: '0rem 3rem',
+                                fontSize: '1.5rem',
+                                fontWeight: '500'
+                            }}
+                        >
+                            {sensor3}
+                        </div>
+                        <div
+                            style={{
+                                padding: '0rem 3rem',
+                                fontSize: '1.5rem',
+                                fontWeight: '500'
+                            }}
+                        >
+                            {sensor4}
+                        </div>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    {decideStrap ? <img src={rightStrap} alt="rightStrap" /> : <img src={leftStrap} alt="leftStrap" />}
+            </Hidden>
+            <Hidden only={['md', 'lg', 'xl']}>
+                <Grid container>
+                    <Grid item xs={12} style={{ padding: '0rem 3rem' }}>
+                        <div
+                            style={{
+                                fontSize: '1.3rem',
+                                fontWeight: '500',
+                                display: 'flex',
+                                alignItems: 'center',
+                                flexDirection: 'column',
+                            }}
+                        >
+                            <div>
+                                {message}
+                                <br /><br />
+                                {secondMessage}
+                                <br /><br />
+                                {thirdMessage}
+                            </div>
+                            <div style={{ marginTop: '1rem' }}>
+                                {decideStrap ? (
+                                    <img src={rightStrap} alt="rightStrap" style={{ width: '100%' }} />
+                                ) : (
+                                    <img src={leftStrap} alt="leftStrap" style={{ width: '100%' }} />
+                                )}
+                            </div>
+                        </div>
+                    </Grid>
+                    <Grid item xs={12} style={{ paddingLeft: '3rem', marginTop: '1rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <div style={{ fontSize: '1.5rem', fontWeight: '500', padding: '0rem 3rem' }}>{sensor1}</div>
+                            <div style={{ fontSize: '1.5rem', fontWeight: '500', padding: '0rem 3rem' }}>{sensor2}</div>
+                            <div style={{ fontSize: '1.5rem', fontWeight: '500', padding: '0rem 3rem' }}>{sensor3}</div>
+                            <div style={{ fontSize: '1.5rem', fontWeight: '500', padding: '0rem 3rem' }}>{sensor4}</div>
+                        </div>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Grid item
-                  xs={12}
-                  style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      paddingLeft: '3rem',
-                  }}
-            >
-                <div
-                    style={{
-                        padding: '0rem 3rem',
-                        fontSize: '1.5rem',
-                        fontWeight: '500'
-                    }}
-                >
-                    {sensor1}
-                </div>
-                <div
-                    style={{
-                        padding: '0rem 3rem',
-                        fontSize: '1.5rem',
-                        fontWeight: '500'
-                    }}
-                >
-                    {sensor2}
-                </div>
-                <div
-                    style={{
-                        padding: '0rem 3rem',
-                        fontSize: '1.5rem',
-                        fontWeight: '500'
-                    }}
-                >
-                    {sensor3}
-                </div>
-                <div
-                    style={{
-                        padding: '0rem 3rem',
-                        fontSize: '1.5rem',
-                        fontWeight: '500'
-                    }}
-                >
-                    {sensor4}
-                </div>
-            </Grid>
-        </Grid>
+            </Hidden>
+        </>
     );
 };
 

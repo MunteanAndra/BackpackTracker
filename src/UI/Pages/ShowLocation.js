@@ -1,4 +1,4 @@
-import {Box, Grid} from "@mui/material";
+import {Box, Grid, Hidden} from "@mui/material";
 import pinIcon from "../../images/pinIcon.png";
 import {BlackButton} from "../Components/CustomButtons/BlackButton";
 import {LocationHandler} from "../Components/LocationHandler";
@@ -14,71 +14,131 @@ export const ShowLocation = () => {
     };
 
     return (
-        <Grid container>
-            <Grid item xs={4} style={{display: 'flex', flexDirection: 'column'}}>
-                <Grid item
-                      xs={12}
-                      style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          paddingTop: '3rem',
-                      }}
-                >
-                    <Box border={1} style={{
+        <>
+            <Hidden only={['xs', 'sm']}>
+                <Grid container>
+                    <Grid item sm={12} md={4} style={{display: 'flex', flexDirection: 'column'}}>
+                        <Grid item xs={12} style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            paddingTop: '3rem'
+                        }}>
+                            <Box
+                                border={1}
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    margin: '1rem',
+                                    width: '80%',
+                                    borderRadius: '3rem',
+                                    padding: '1.5rem',
+                                }}
+                            >
+                                <img src={pinIcon} alt="PinIcon" width="13%"/>
+                                <div style={{padding: '0rem 1rem', fontSize: '1.5rem', fontWeight: '500'}}>Your
+                                    backpack
+                                </div>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            {address}
+                        </Grid>
+                        <Grid item xs={12} style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            paddingTop: '3rem'
+                        }}>
+                            <BlackButton>
+                                See Alert
+                            </BlackButton>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} sm={8} style={{
                         display: 'flex',
-                        flexDirection: 'row',
+                        flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        padding: '2rem',
-                        width: '40%',
-                        borderRadius: '4rem'
+                        paddingTop: '3rem',
+                        paddingRight: '2rem',
+                        height: '30rem'
                     }}>
-                        <img src={pinIcon} alt="PinIcon" width="13%"/>
-                        <div style={{padding: '0rem 1rem', fontSize: '1.5rem', fontWeight: '500'}}>BackPack1</div>
-                    </Box>
+                        <LocationHandler func={getAddress}/>
+                    </Grid>
                 </Grid>
-                <Grid item
-                      xs={12}
-                      style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                      }}
-                >
-                    {address}
+            </Hidden>
+            <Hidden only={['md', 'lg', 'xl']}>
+                <Grid container>
+                    <Grid item sm={12} style={{display: 'flex'}}>
+                        <Grid item xs={6} style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            paddingLeft: '2rem',
+                        }}>
+                            <Box
+                                border={1}
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    margin: '1rem',
+                                    width: '80%',
+                                    borderRadius: '3rem',
+                                    padding: '1.5rem',
+                                }}
+                            >
+                                <img src={pinIcon} alt="PinIcon" width="13%"/>
+                                <div style={{padding: '0rem 1rem', fontSize: '1.5rem', fontWeight: '500'}}>Your
+                                    backpack
+                                </div>
+                            </Box>
+                        </Grid>
+                        {/*<Grid item xs={12} style={{*/}
+                        {/*    display: 'flex',*/}
+                        {/*    flexDirection: 'column',*/}
+                        {/*    alignItems: 'center',*/}
+                        {/*    justifyContent: 'center'*/}
+                        {/*}}>*/}
+                        {/*    {address}*/}
+                        {/*</Grid>*/}
+                        <Grid item xs={6} style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                            <BlackButton>
+                                See Alert
+                            </BlackButton>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        paddingTop: '3rem',
+                        paddingLeft: '2rem',
+                        paddingRight: '2rem',
+                        height: '30rem'
+                    }}>
+                        <LocationHandler func={getAddress}/>
+                    </Grid>
                 </Grid>
-                <Grid item
-                      xs={12}
-                      style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          paddingTop: '3rem',
-                      }}
-                >
-                    <BlackButton>
-                        See Alert
-                    </BlackButton>
-                </Grid>
-            </Grid>
-            <Grid item
-                  xs={8}
-                  style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      paddingTop: '3rem',
-                      paddingRight: '2rem',
-                      height: '30rem',
-                  }}
-            >
-                <LocationHandler func={getAddress}/>
-            </Grid>
-        </Grid>
+            </Hidden>
+        </>
     );
 };

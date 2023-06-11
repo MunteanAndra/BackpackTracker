@@ -1,4 +1,4 @@
-import {Box, Grid} from "@mui/material";
+import {Box, Grid, Hidden} from "@mui/material";
 import {BlackButton} from "./CustomButtons/BlackButton";
 import {AddButton} from "./CustomButtons/AddButton";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -36,7 +36,7 @@ export const AuthenticatedApp = () => {
     }
 
     return(
-        <Grid container style={{padding: '4rem 0rem'}}>
+        <Grid container>
             <Grid item xs={12}>
                 <SideMenu />
             </Grid>
@@ -53,7 +53,7 @@ export const AuthenticatedApp = () => {
                     Hi, User!
                 </div>
                 <div style={{ fontWeight: '700', fontSize: '1.5rem' }}>
-                    Here are your things
+                    Here is your backpack
                 </div>
             </Grid>
             <Grid item
@@ -67,15 +67,31 @@ export const AuthenticatedApp = () => {
                   }}
             >
                 {backpacks.map((backpack) => (
-                <Box border={1} key={backpack.backpack_name} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3rem', width: '40%', marginBottom: '1rem' }}>
-                    <img src={pinIcon} alt="PinIcon" width="10%"/>
-                    <div style={{padding: '0rem 3rem', fontSize: '1.5rem', fontWeight: '500'}}>
-                        {backpack.backpack_name}
-                    </div>
-                    <BlackButton onClick={handleShowLocation}>
-                        Show on Map
-                    </BlackButton>
-                </Box>))}
+                    <>
+                        <Hidden only={['md','lg','xl']}>
+                            <Box border={1} key={backpack.uuid} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '3rem', width: '60%', marginBottom: '1rem', borderRadius: '2rem' }}>
+                                <div style={{fontSize: '1.5rem', fontWeight: '500', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly', paddingBottom: '1rem'}}>
+                                    <img src={pinIcon} alt="PinIcon" width="10%"/>
+                                    {backpack.backpack_name}
+                                </div>
+                                <BlackButton onClick={handleShowLocation}>
+                                    Show on Map
+                                </BlackButton>
+                            </Box>
+                        </Hidden>
+                        <Hidden only={['xs','sm']}>
+                            <Box border={1} key={backpack.uuid} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: '3rem', width: '40%', marginBottom: '1rem' }}>
+                                <img src={pinIcon} alt="PinIcon" width="10%"/>
+                                <div style={{padding: '0rem 3rem', fontSize: '1.5rem', fontWeight: '500'}}>
+                                    {backpack.backpack_name}
+                                </div>
+                                <BlackButton onClick={handleShowLocation}>
+                                    Show on Map
+                                </BlackButton>
+                            </Box>
+                        </Hidden>
+                    </>
+                ))}
             </Grid>
             <Grid item
                   xs={12}
