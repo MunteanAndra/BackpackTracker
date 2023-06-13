@@ -3,15 +3,21 @@ import pinIcon from "../../images/pinIcon.png";
 import {BlackButton} from "../Components/CustomButtons/BlackButton";
 import {LocationHandler} from "../Components/LocationHandler";
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 export const ShowLocation = () => {
 
     const [address, setAddress] = useState('');
+    const navigate = useNavigate();
 
     const getAddress = (data) => {
         console.log('Data received from child:', data);
         setAddress(data);
     };
+
+    const handleSeeRoute = () => {
+        navigate('/RouteMap');
+    }
 
     return (
         <>
@@ -59,8 +65,8 @@ export const ShowLocation = () => {
                             justifyContent: 'center',
                             paddingTop: '3rem'
                         }}>
-                            <BlackButton>
-                                See Alert
+                            <BlackButton onClick={handleSeeRoute}>
+                                See Route
                             </BlackButton>
                         </Grid>
                     </Grid>
@@ -120,8 +126,8 @@ export const ShowLocation = () => {
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
-                            <BlackButton>
-                                See Alert
+                            <BlackButton onClick={handleSeeRoute}>
+                                See Route
                             </BlackButton>
                         </Grid>
                     </Grid>

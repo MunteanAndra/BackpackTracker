@@ -39,7 +39,7 @@ export const LocationHandler = ({func}) => {
                 setLng(data);
             }
         });
-        convertToAddress().then(r => {func(address);});
+        convertToAddress().then(r => {func(address); console.log(r)});
         console.log(address);
     }, []);
 
@@ -87,7 +87,7 @@ export const LocationHandler = ({func}) => {
         <GoogleMap
             mapContainerStyle={containerStyle}
             center={gpsLocation}
-            zoom={19}
+            zoom={18}
             onLoad={onLoad}
             onUnmount={onUnmount}
         >

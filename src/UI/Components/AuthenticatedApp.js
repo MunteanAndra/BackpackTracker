@@ -1,7 +1,5 @@
 import {Box, Grid, Hidden} from "@mui/material";
 import {BlackButton} from "./CustomButtons/BlackButton";
-import {AddButton} from "./CustomButtons/AddButton";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import pinIcon from "../../images/pinIcon.png";
 import {useNavigate} from "react-router-dom";
 import SideMenu from "./Drawer/SideMenu";
@@ -11,7 +9,6 @@ import {db} from "../../firebase";
 
 export const AuthenticatedApp = () => {
 
-    let navigateToAddItem = useNavigate();
     let navigateToShowLocation = useNavigate();
     const [backpacks, setBackpacks] = useState([]);
 
@@ -27,9 +24,6 @@ export const AuthenticatedApp = () => {
         });
     }, []);
 
-    const handleAddItem = () => {
-        navigateToAddItem('/AddItem');
-    }
 
     const handleShowLocation = () => {
         navigateToShowLocation('/ShowLocation');
@@ -64,6 +58,7 @@ export const AuthenticatedApp = () => {
                       alignItems: 'center',
                       justifyContent: 'center',
                       paddingTop: '3rem',
+                      paddingBottom: '5rem',
                   }}
             >
                 {backpacks.map((backpack) => (
@@ -93,25 +88,25 @@ export const AuthenticatedApp = () => {
                     </>
                 ))}
             </Grid>
-            <Grid item
-                  xs={12}
-                  style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      paddingTop: '3rem',
-                  }}
-            >
-                <AddButton
-                    startIcon={<AddCircleIcon />}
-                    variant="outlined"
-                    color="error"
-                    onClick={handleAddItem}
-                >
-                    Add new backpack
-                </AddButton>
-            </Grid>
+            {/*<Grid item*/}
+            {/*      xs={12}*/}
+            {/*      style={{*/}
+            {/*          display: 'flex',*/}
+            {/*          flexDirection: 'column',*/}
+            {/*          alignItems: 'center',*/}
+            {/*          justifyContent: 'center',*/}
+            {/*          paddingTop: '3rem',*/}
+            {/*      }}*/}
+            {/*>*/}
+            {/*    <AddButton*/}
+            {/*        startIcon={<AddCircleIcon />}*/}
+            {/*        variant="outlined"*/}
+            {/*        color="error"*/}
+            {/*        onClick={handleAddItem}*/}
+            {/*    >*/}
+            {/*        Add new backpack*/}
+            {/*    </AddButton>*/}
+            {/*</Grid>*/}
         </Grid>
     );
 };

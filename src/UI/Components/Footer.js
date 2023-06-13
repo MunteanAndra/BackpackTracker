@@ -8,10 +8,10 @@ export const Footer = () => {
                     width: '100%',
                     height: '2rem',
                     color: '#18191A',
-                    padding: '2rem 0rem',
+                    padding: '3rem 0rem',
                 }}
             />
-            <Grid container style={{padding: '2rem 0rem'}}>
+            <Grid container style={{padding: '3rem 0rem'}}>
                 <Grid item
                       xs={6}
                       style={{
@@ -21,18 +21,12 @@ export const Footer = () => {
                      }}
                 >
                     <div style={{paddingRight: '1rem', fontWeight: '700'}}>
-                        Connect
+                        Repository
                     </div>
                     <div>
-                        <div>
-                            Facebook
-                        </div>
-                        <div>
-                            Instagram
-                        </div>
-                        <div>
-                            Youtube
-                        </div>
+                        <a href="https://github.com/MunteanAndra/BackpackTracker" target="blank" style={{ color: 'black', textDecoration: 'none' }}>
+                            Github
+                        </a>
                     </div>
                 </Grid>
                 <Grid item
@@ -44,10 +38,10 @@ export const Footer = () => {
                       }}
                 >
                     <div style={{paddingRight: '1rem', fontWeight: '700'}}>
-                        Resources
+                        Development
                     </div>
                     <div>
-                        Privacy policy
+                        2022-2023
                     </div>
                 </Grid>
             </Grid>

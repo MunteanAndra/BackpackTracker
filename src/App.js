@@ -11,6 +11,7 @@ import {authSelector, loginFromRedux} from "./store/Auth";
 import {useEffect} from "react";
 import {Items} from "./UI/Pages/Items";
 import {Position} from "./UI/Pages/Position";
+import {RouteMap} from "./UI/Components/RouteMap";
 
 export const App = () => {
 
@@ -55,6 +56,9 @@ export const App = () => {
                     />
                     <Route path="/Position"
                            element={<Position/>}
+                    />
+                    <Route path="/RouteMap"
+                           element={<RouteMap />}
                     />
                     <Route path="/*"
                            element={<AuthenticatedApp/>}
