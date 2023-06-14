@@ -11,6 +11,9 @@ import {
 import {useEffect, useState} from "react";
 import {onValue, ref, set} from "firebase/database";
 import {db} from "../../firebase";
+import charger from "../../images/charger.png";
+import chocolate from "../../images/chocolate.png";
+import apple from "../../images/apple.png";
 import laptop from "../../images/laptop.png";
 import wallet from "../../images/wallet.png";
 import bottleOfWater from "../../images/bottleOfWater.png";
@@ -22,15 +25,14 @@ export const Items = () => {
 
     const [itemName, setItemName] = useState('');
     const [itemWeight, setItemWeight] = useState('');
-    const [weight1, setWeight1] = useState('');
-    const [weight2, setWeight2] = useState('');
-    const [weight3, setWeight3] = useState('');
     const [bodyWeight, setBodyWeight] = useState(0);
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(true);
     const [formItems, setFormItems] = useState([]);
-    let item1, item2, item3, src1, src2, src3, totalWeight, message, validate = true, dialogMessage = '',
-        arr = [];
+    const [weightValues, setWeightValues] = useState([]);
+    const items = [], src = [], weightValuesKg = [];
+    const range = 50;
+    let totalWeight = 0, message, validate = true, dialogMessage = '', arr = [], isItemInRange;
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -41,30 +43,7 @@ export const Items = () => {
         setOpen(false);
     };
 
-    totalWeight = weight1 + weight2 + weight3;
-
     useEffect(() => {
-        onValue(ref(db, '/weight1'), (snapshot) => {
-            setWeight1('[]');
-            const data = snapshot.val();
-            if (data !== null) {
-                setWeight1(data);
-            }
-        });
-        onValue(ref(db, '/weight2'), (snapshot) => {
-            setWeight2('[]');
-            const data = snapshot.val();
-            if (data !== null) {
-                setWeight2(data);
-            }
-        });
-        onValue(ref(db, '/weight3'), (snapshot) => {
-            setWeight3('[]');
-            const data = snapshot.val();
-            if (data !== null) {
-                setWeight3(data);
-            }
-        });
         onValue(ref(db, '/addedItems'), (snapshot) => {
             setFormItems([]);
             const data = snapshot.val();
@@ -80,16 +59,25 @@ export const Items = () => {
         addBodyWeightToDatabase();
     }, []);
 
+    useEffect(() => {
+        onValue(ref(db, '/weightValues'), (snapshot) => {
+            setWeightValues([]);
+            const data = snapshot.val();
+            if (data !== null) {
+                Object.values(data).map(set => {
+                    setWeightValues((oldArray) => [...oldArray, set]);
+                });
+            }
+        });
+    }, []);
+
+    for (let i = 0; i < weightValues.length; i++) {
+        arr.push(weightValues[i]);
+        totalWeight += weightValues[i];
+    }
 
     const handleWeightChange = (event) => {
         setBodyWeight(event.target.value);
-    };
-
-    const updateBodyWeight = () => {
-        localStorage.setItem("bodyWeight", bodyWeight.toString());
-        if (localStorage.getItem("bodyWeight") !== '0') {
-            setShow(true);
-        }
     };
 
     const handleItemWeightChange = (event) => {
@@ -101,9 +89,16 @@ export const Items = () => {
         setItemName(event.target.value);
     };
 
+    const updateBodyWeight = () => {
+        localStorage.setItem("bodyWeight", bodyWeight.toString());
+        if (localStorage.getItem("bodyWeight") !== '0') {
+            setShow(true);
+        }
+    };
+
     const addItemToDatabase = () => {
         const uuid = uid();
-        set(ref(db, `/weight${uuid}`), {
+        set(ref(db, `/addedItems/${uuid}`), {
             item_name: itemName, item_weight: itemWeight, uuid,
         })
     };
@@ -114,31 +109,6 @@ export const Items = () => {
         })
     };
 
-    arr.push(weight1, weight2, weight3);
-    const range = 50;
-
-    const searchItemWithRange = (arr, target, range) => {
-        return arr.some((item) => Math.abs(item - target) <= range);
-    };
-
-    const isItemInRange = searchItemWithRange(arr, itemWeight * 1000, range);
-
-    if (bodyWeight === 0) {
-        dialogMessage = '';
-    } else if (itemWeight * 100 > (bodyWeight * 100 - totalWeight)) {
-        dialogMessage = "Because adding this item passes the recommended weight, " + "we advise you not to add it. " + "If you want to replace an item that you already have, " + "please remove it manually.";
-    } else if (itemWeight >= bodyWeight / 10) {
-        dialogMessage = "Because adding this item passes the recommended weight, " + "we advise you not to add it. " + "If you want to replace an item that you already have, " + "please remove it manually.";
-    }
-
-    if (itemWeight === '' || itemName === '' || bodyWeight === 0) {
-        validate = false;
-    }
-
-    if (bodyWeight === 0) {
-        dialogMessage = 'Add your body weight first';
-    }
-
     const submitHandler = () => {
         addItemToDatabase();
         handleClose();
@@ -146,55 +116,119 @@ export const Items = () => {
         setItemWeight('');
     }
 
-    if (weight1 > 100 && weight1 < 300) {
-        item1 = "wallet";
-        src1 = wallet;
-    } else if (weight1 > 400 && weight1 < 600) {
-        item1 = "bottle of water";
-        src1 = bottleOfWater;
-    } else if (weight1 > 1100 && weight1 < 1400) {
-        item1 = "laptop";
-        src1 = laptop;
+    const searchItemWithRange = (arr, target, range) => {
+        return arr.some((item) => Math.abs(item - target) <= range);
+    };
+
+    if( itemWeight ) {
+        isItemInRange = searchItemWithRange(arr, itemWeight * 1000, range);
+    } else {
+        isItemInRange = false;
     }
 
-    if (weight2 >= 100 && weight2 <= 300) {
-        item2 = "wallet";
-        src2 = wallet;
-    } else if (weight2 >= 400 && weight2 <= 600) {
-        item2 = "bottle of water";
-        src2 = bottleOfWater;
-    } else if (weight2 >= 1100 && weight2 <= 1400) {
-        item2 = "laptop";
-        src2 = laptop;
+    if (bodyWeight === 0) {
+        dialogMessage = '';
+    } else if (itemWeight * 1000 > (bodyWeight * 100 - totalWeight)) {
+        dialogMessage = "Because adding this item passes the recommended weight, "
+            + "we advise you not to add it. "
+            + "If you want to replace an item that you already have, "
+            + "please remove it manually.";
+    } else if (itemWeight >= bodyWeight / 10) {
+        dialogMessage = "Because adding this item passes the recommended weight, "
+            + "we advise you not to add it. "
+            + "If you want to replace an item that you already have, "
+            + "please remove it manually.";
     }
 
-    if (weight3 >= 100 && weight3 <= 300) {
-        item3 = "wallet";
-        src3 = wallet;
-    } else if (weight3 >= 400 && weight3 <= 600) {
-        item3 = "bottle of water";
-        src3 = bottleOfWater;
-    } else if (weight3 >= 1100 && weight3 <= 1400) {
-        item3 = "laptop";
-        src3 = laptop;
+    if (itemWeight === '' || itemName === '' || bodyWeight === 0) {
+        validate = false;
     }
+
+    if (bodyWeight === 0) {
+        dialogMessage = 'Update your body weight first';
+    }
+
+    for (let i = 0; i < weightValues.length; i++) {
+        const weight = weightValues[i];
+        weightValuesKg[i] = weightValues[i]/1000;
+
+        if (weight > 100 && weight < 300) {
+            items[i] = "wallet";
+            src[i] = wallet;
+        } else if (weight > 400 && weight < 600) {
+            items[i] = "bottle of water";
+            src[i] = bottleOfWater;
+        } else if (weight > 1100 && weight < 1400) {
+            items[i] = "laptop";
+            src[i] = laptop;
+        }
+    }
+
+    const importMapping = {
+        charger: charger,
+        chocolate: chocolate,
+        apple: apple
+    };
+
+    formItems.forEach(formItem => {
+        const lowerRange = parseFloat(formItem.item_weight) - 0.1;
+        const upperRange = parseFloat(formItem.item_weight) + 0.1;
+
+        weightValuesKg.forEach(weight => {
+            if (weight >= lowerRange && weight <= upperRange) {
+                items.push(formItem.item_name);
+                src.push(importMapping[formItem.item_name]);
+            }
+        });
+    });
 
     if (totalWeight < bodyWeight * 100) {
         message = '';
     } else {
-        message = 'Your backpack is heavier than it should, ' + 'we advise you to give up on the unnecessary things because wearing it like this ' + 'may affect you health. ';
+        message = 'Your backpack is heavier than it should, '
+            + 'we advise you to give up on the unnecessary things because wearing it like this '
+            + 'may affect you health. ';
     }
 
-    const data = [
-        ["Item", "Kilograms"],
-        [item1, weight1 / 100],
-        [item2, weight2 / 100],
-        [item3, weight3 / 100],
-    ];
+    const data = [["Item", "Kilograms"]];
+
+    for (let i = 0; i < items.length; i++) {
+        data.push([items[i], weightValuesKg[i]]);
+    }
 
     const options = {
         title: "My items",
     };
+
+    const renderedItemsDesktop = [];
+    for (let i = 0; i < items.length; i += 3) {
+        const lineItems = items.slice(i, i + 3);
+        const lineSrc = src.slice(i, i + 3);
+
+        const line = (
+            <div key={i} style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                {lineItems.map((item, index) => (
+                    <div key={index} style={{ marginRight: '4rem', display: 'flex', alignItems: 'center', flexDirection: 'column', marginBottom: '1.5rem' }}>
+                        <img src={lineSrc[index]} alt={`src${i + index + 1}`} />
+                        <div style={{ fontSize: '1.5rem', fontWeight: '500', marginTop: '1.5rem' }}>
+                            {item}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+
+        renderedItemsDesktop.push(line);
+    }
+
+    const renderedItemsMobile = items.map((item, index) => (
+        <div key={index} style={{ display: 'contents' }}>
+            <img src={src[index]} alt={`src${index + 1}`} style={{ maxWidth: '100%', height: 'auto' }} />
+            <Typography variant="subtitle1" style={{ fontSize: '1.5rem', fontWeight: '500', textAlign: 'center', marginBottom: '2rem', marginTop: '0.5rem' }}>
+                {item}
+            </Typography>
+        </div>
+    ));
 
     return (
         <>
@@ -303,29 +337,11 @@ export const Items = () => {
                         </div>
                     </Grid>
                     <Grid item xs={12} style={{
-                        display: 'flex',
-                        justifyContent: 'space-around',
                         marginTop: '4rem',
-                        marginBottom: '4rem'
+                        marginBottom: '4rem',
+
                     }}>
-                        <div style={{marginRight: '4rem'}}>
-                            <img src={src1} alt="src1"/>
-                            <div style={{fontSize: '1.5rem', fontWeight: '500'}}>
-                                {item1}
-                            </div>
-                        </div>
-                        <div style={{marginRight: '4rem'}}>
-                            <img src={src2} alt="src2"/>
-                            <div style={{fontSize: '1.5rem', fontWeight: '500'}}>
-                                {item2}
-                            </div>
-                        </div>
-                        <div>
-                            <img src={src3} alt="src3"/>
-                            <div style={{fontSize: '1.5rem', fontWeight: '500'}}>
-                                {item3}
-                            </div>
-                        </div>
+                        {renderedItemsDesktop}
                     </Grid>
                     <Divider style={{ width: '90%', border: '0.1rem solid grey' }} />
                     <Chart
@@ -438,39 +454,10 @@ export const Items = () => {
                         flexDirection: 'column',
                         alignItems: 'center',
                         marginTop: '4rem',
-                        marginBottom: '4rem'
                     }}>
-                        <div style={{marginBottom: '2rem'}}>
-                            <img src={src1} alt="src1" style={{maxWidth: '100%', height: 'auto'}}/>
-                            <Typography variant="subtitle1"
-                                        style={{fontSize: '1.5rem', fontWeight: '500', textAlign: 'center'}}>
-                                {item1}
-                            </Typography>
-                        </div>
-                        <div style={{marginBottom: '2rem'}}>
-                            <img src={src2} alt="src2" style={{maxWidth: '100%', height: 'auto'}}/>
-                            <Typography variant="subtitle1"
-                                        style={{fontSize: '1.5rem', fontWeight: '500', textAlign: 'center'}}>
-                                {item2}
-                            </Typography>
-                        </div>
-                        <div style={{display: 'contents'}}>
-                            <img src={src3} alt="src3" style={{maxWidth: '100%', height: 'auto'}}/>
-                            <Typography variant="subtitle1"
-                                        style={{fontSize: '1.5rem', fontWeight: '500', textAlign: 'center'}}>
-                                {item3}
-                            </Typography>
-                        </div>
+                        {renderedItemsMobile}
                     </Grid>
                     <Divider style={{width: '90%', margin: '2rem auto'}}/>
-                    {/*<Grid item xs={12} style={{fontSize: '1.5rem', fontWeight: '500', marginLeft: '3rem', marginTop: '3rem'}}>*/}
-                    {/*    You have added these new items in your list*/}
-                    {/*    <ul>*/}
-                    {/*        {formItems.map((formItem) => (<li key={formItem.uuid}>*/}
-                    {/*            {formItem.item_name}*/}
-                    {/*        </li>))}*/}
-                    {/*    </ul>*/}
-                    {/*</Grid>*/}
                     <Chart
                         chartType="PieChart"
                         data={data}
