@@ -9,6 +9,7 @@ import leftStrap from "../../images/leftStrap.png";
 import rightStrap from "../../images/rightStrap.png";
 import front from "../../images/front.png";
 import back from "../../images/back.png";
+import check from "../../images/check.png";
 
 export const Position = () => {
 
@@ -62,8 +63,11 @@ export const Position = () => {
         message = 'Good for you! Your wear position is correct';
     }
 
+    let noImageStrap = false, noImageSide = false;
+
     if (leftStrapPressure === rightStrapPressure) {
-        secondMessage = 'Everything is ok';
+        secondMessage = 'Everything is ok!';
+        noImageStrap = true;
     } else if (leftStrapPressure < rightStrapPressure) {
         secondMessage = 'You might consider readjusting your right strap.';
         decideStrap = true;
@@ -74,6 +78,7 @@ export const Position = () => {
 
     if (frontPressure === backPressure) {
         thirdMessage = '';
+        noImageSide = true;
     } else if (frontPressure < backPressure) {
         thirdMessage = 'And you might also readjust your straps to the front because there is too much pressure on your back.';
         decideSide = true;
@@ -107,18 +112,18 @@ export const Position = () => {
                             {thirdMessage}
                         </Grid>
                         <Grid item xs={12} style={{display: 'flex'}}>
-                            {decideStrap ? (
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <img src={rightStrap} alt="rightStrap"/>
-                                    <div style={{ fontWeight: 700 }}> RIGHT</div>
-                                </div>
-                            ) : (
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <img src={leftStrap} alt="leftStrap"/>
-                                    <div style={{ fontWeight: 700 }}> LEFT</div>
-                                </div>
-                            )}
-                            {decideSide ? (
+                            { !noImageSide ? decideStrap ? (
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                        <img src={rightStrap} alt="rightStrap"/>
+                                        <div style={{ fontWeight: 700 }}> RIGHT</div>
+                                    </div>
+                                ) : (
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                        <img src={leftStrap} alt="leftStrap"/>
+                                        <div style={{ fontWeight: 700 }}> LEFT</div>
+                                    </div>
+                                ) : null }
+                            { !noImageSide ? decideSide ? (
                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <img src={back} alt="back" style={{width: '100%'}} />
                                     <div style={{ fontWeight: 700 }}> BACK</div>
@@ -128,7 +133,10 @@ export const Position = () => {
                                     <img src={front} alt="front" style={{width: '100%'}} />
                                     <div style={{ fontWeight: 700 }}> FRONT</div>
                                 </div>
-                            )}
+                            ) : null }
+                            { noImageSide && noImageStrap ? (
+                                <img src={check} alt="check" style={{width: '100%'}}/>
+                            ) :  null}
                         </Grid>
                     </Grid>
                     <Grid item
@@ -200,7 +208,7 @@ export const Position = () => {
                                 {thirdMessage}
                             </div>
                             <div style={{marginTop: '1rem'}}>
-                                {decideStrap ? (
+                                { !noImageStrap ? decideStrap ? (
                                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                         <img src={rightStrap} alt="rightStrap" style={{width: '100%'}}/>
                                         <div style={{ fontWeight: 700 }}> RIGHT</div>
@@ -210,8 +218,8 @@ export const Position = () => {
                                         <img src={leftStrap} alt="leftStrap" style={{width: '100%'}}/>
                                         <div style={{ fontWeight: 700 }}> LEFT</div>
                                     </div>
-                                )}
-                                {decideSide ? (
+                                ) : null }
+                                { !noImageSide ? decideSide ? (
                                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                         <img src={back} alt="back" style={{width: '100%'}}/>
                                         <div style={{ fontWeight: 700 }}> BACK</div>
@@ -221,7 +229,10 @@ export const Position = () => {
                                         <img src={front} alt="front" style={{width: '100%'}}/>
                                         <div style={{ fontWeight: 700 }}> FRONT</div>
                                     </div>
-                                )}
+                                ) : null }
+                                { noImageSide && noImageStrap ? (
+                                    <img src={check} alt="check" style={{width: '100%'}}/>
+                                ) :  null}
                             </div>
                         </div>
                     </Grid>

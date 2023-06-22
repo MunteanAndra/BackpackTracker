@@ -15,7 +15,7 @@ export const Login = () => {
     const [phoneNumber, setPhoneNumber] = useState('+40');
     const [verificationCode, setVerificationCode] = useState('');
     const [show, setShow] = useState(false);
-    const [openAlert, setOpenAlert] = useState(false);
+    const [openAlertCode, setOpenAlertCode] = useState(false);
 
     const handleRedirectAuthHome = () => {
         navigateAuthHome('/');
@@ -54,7 +54,7 @@ export const Login = () => {
                 setShow(true);
                 console.log("Code has been sent");
             }).catch((error) => {
-            console.log(error, "SMS not sent");
+                console.log(error, "SMS not sent");
         });
     };
 
@@ -64,7 +64,7 @@ export const Login = () => {
             dispatch(loginFromRedux(true));
             localStorage.setItem("token", "1234567");
         }).catch((error) => {
-            setOpenAlert(true);
+            setOpenAlertCode(true);
             console.log(error, "User couldn't sign in");
         });
     };
@@ -136,7 +136,7 @@ export const Login = () => {
                             <BlackButton onClick={onSubmitOTP} disabled={!verificationCode} style={{ marginBottom: '2rem' }}>
                                 Log in
                             </BlackButton>
-                            <Collapse in={openAlert}>
+                            <Collapse in={openAlertCode}>
                                 <Alert severity="warning"> Verification code is incorrect </Alert>
                             </Collapse>
                         </>

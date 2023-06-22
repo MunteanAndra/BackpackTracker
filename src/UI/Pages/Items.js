@@ -29,8 +29,8 @@ export const Items = () => {
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(true);
     const [formItems, setFormItems] = useState([]);
-    const [weightValues, setWeightValues] = useState([]);
-    const items = [], src = [], weightValuesKg = [];
+    const [initialWeightValues, setInitialWeightValues] = useState([]);
+    const items = [], src = [], weightValuesKg = [], weightValues = [];
     const range = 50;
     let totalWeight = 0, message, validate = true, dialogMessage = '', arr = [], isItemInRange;
 
@@ -61,15 +61,27 @@ export const Items = () => {
 
     useEffect(() => {
         onValue(ref(db, '/weightValues'), (snapshot) => {
-            setWeightValues([]);
+            setInitialWeightValues([]);
             const data = snapshot.val();
             if (data !== null) {
                 Object.values(data).map(set => {
-                    setWeightValues((oldArray) => [...oldArray, set]);
+                    setInitialWeightValues((oldArray) => [...oldArray, set]);
                 });
             }
         });
     }, []);
+
+    const searchItemWithRange = (arr, target, range) => {
+        return arr.some((item) => Math.abs(item - target) <= range);
+    };
+
+    for (let i = 0; i < initialWeightValues.length; i++) {
+        const number = Math.floor(initialWeightValues[i]);
+
+        if (!searchItemWithRange(weightValues, number, 10)) {
+            weightValues.push(number);
+        }
+    }
 
     for (let i = 0; i < weightValues.length; i++) {
         arr.push(weightValues[i]);
@@ -116,10 +128,6 @@ export const Items = () => {
         setItemWeight('');
     }
 
-    const searchItemWithRange = (arr, target, range) => {
-        return arr.some((item) => Math.abs(item - target) <= range);
-    };
-
     if( itemWeight ) {
         isItemInRange = searchItemWithRange(arr, itemWeight * 1000, range);
     } else {
@@ -155,10 +163,10 @@ export const Items = () => {
         if (weight > 100 && weight < 300) {
             items[i] = "wallet";
             src[i] = wallet;
-        } else if (weight > 400 && weight < 600) {
+        } else if (weight > 350 && weight < 480) {
             items[i] = "bottle of water";
             src[i] = bottleOfWater;
-        } else if (weight > 1100 && weight < 1400) {
+        } else if (weight > 1950 && weight < 2550) {
             items[i] = "laptop";
             src[i] = laptop;
         }
@@ -171,8 +179,8 @@ export const Items = () => {
     };
 
     formItems.forEach(formItem => {
-        const lowerRange = parseFloat(formItem.item_weight) - 0.1;
-        const upperRange = parseFloat(formItem.item_weight) + 0.1;
+        const lowerRange = parseFloat(formItem.item_weight) - 0.5;
+        const upperRange = parseFloat(formItem.item_weight) + 0.5;
 
         weightValuesKg.forEach(weight => {
             if (weight >= lowerRange && weight <= upperRange) {
@@ -182,9 +190,10 @@ export const Items = () => {
         });
     });
 
-    if (totalWeight < bodyWeight * 100) {
+    if ( totalWeight < bodyWeight * 100 ) {
         message = '';
     } else {
+        if( totalWeight !== 0 )
         message = 'Your backpack is heavier than it should, '
             + 'we advise you to give up on the unnecessary things because wearing it like this '
             + 'may affect you health. ';

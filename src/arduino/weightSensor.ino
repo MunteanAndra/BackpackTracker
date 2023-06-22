@@ -1,34 +1,22 @@
+
+#include "HX711.h"
 #include <Firebase_Arduino_WiFiNINA_HTTPClient.h>
 #include <Firebase_Arduino_WiFiNINA.h>
 #include <Arduino_LSM6DS3.h>
-#include "HX711.h"
 
-// import env.txt
+// env.txt
 
-#define calibration_factor -7050.0 //This value is obtained using the SparkFun_HX711_Calibration sketch
-
-#define LOADCELL_DOUT_PIN  3
-#define LOADCELL_SCK_PIN  2
-
-FirebaseData firebaseData;
 HX711 scale;
+FirebaseData firebaseData;
 
-String path = "/calibrated";
+String path = "/weightValues";
 String jsonStr;
-int y;
+float calibration_factor = 406; // this calibration factor is adjusted according to my load cell
+float units;
+float ounces;
 
-void setup()
-{
+void setup() {
   Serial.begin(9600);
-  delay(1000);
-  Serial.println();
-  Serial.println("HX711 scale demo");
-
-  scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
-  scale.set_scale(calibration_factor); //This value is obtained by using the SparkFun_HX711_Calibration sketch
-  scale.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
-
-  Serial.print("Connecting to WiFi...");
 
   int status = WL_IDLE_STATUS;
   while (status != WL_CONNECTED) {
@@ -41,33 +29,50 @@ void setup()
   Serial.println();
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH, WIFI_SSID, WIFI_PASSWORD);
   Firebase.reconnectWiFi(true);
+
+  Serial.println("HX711 calibration sketch");
+  Serial.println("Remove all weight from scale");
+  Serial.println("After readings begin, place known weight on scale");
+  Serial.println("Press + or a to increase calibration factor");
+  Serial.println("Press - or z to decrease calibration factor");
+
+  scale.begin(3, 2);
+  scale.set_scale();
+  scale.tare();  //Reset the scale to 0
 }
 
-void loop()
-{
-    float x;
-    x =  0.454 * scale.get_units();
-    y++;
+void loop() {
 
-    Serial.print("Reading: ");
-    Serial.print(0.454 * scale.get_units(), 1);
-    Serial.print(" kg");
-    Serial.println();
+  scale.set_scale(calibration_factor); //Adjust to this calibration factor
+  int y=1;
 
-    // Send data to Firebase with specific path
-    if (Firebase.setFloat(firebaseData, path + "Weight", x)) {
-          Serial.println(firebaseData.dataPath() + y + " = " + x);
-        }
+  Serial.print("Reading: ");
+  units = scale.get_units(), 10;
+  if (units < 0)
+  {
+    units = 0.00;
+  }
+  ounces = units * 0.035274;
+  Serial.print(units);
+  Serial.print(" grams\n");
 
-    // Push data using pushJSON
-        jsonStr = "{ }";
-    if (Firebase.pushJSON(firebaseData, "2-pushJSON", jsonStr)) {
-          Serial.println(firebaseData.dataPath() + " = " + firebaseData.pushName());
-        }
-    else {
-          Serial.println("Error firebase: " + firebaseData.errorReason());
-        }
-        Serial.println();
-    delay(2000);
 
+  if( units > 10 ) {
+    float aux = units;
+    if (Firebase.pushFloat(firebaseData, path, units)) {
+            Serial.println(firebaseData.dataPath() + units);
+          }
+          y++;
+      // Push data using pushJSON
+          jsonStr = "{ }";
+      if (Firebase.pushJSON(firebaseData, "2-pushJSON", jsonStr)) {
+            Serial.println(firebaseData.dataPath() + " = " + firebaseData.pushName());
+          }
+      else {
+            Serial.println("Error firebase: " + firebaseData.errorReason());
+          }
+          Serial.println();
+
+  }
+  delay(3000);
 }
