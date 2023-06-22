@@ -1,7 +1,6 @@
 import {GoogleMap, useJsApiLoader, Marker} from '@react-google-maps/api';
 import {useCallback, useEffect, useState} from "react";
 import {GOOGLE_API_KEY} from "../../mapsAPI";
-import {collection, getDocs} from "firebase/firestore";
 import {db} from "../../firebase";
 import {onValue, ref} from "firebase/database";
 
@@ -10,68 +9,51 @@ const containerStyle = {
     height: '100%'
 };
 
-export const LocationHandler = ({func}) => {
+export const LocationHandler = () => {
 
-    const [coordinates, setCoordinates] = useState([]);
+    const [latitudes, setLatitudes] = useState([]);
+    const [longitudes, setLongitudes] = useState([]);
     const [map, setMap] = useState(null);
-    const [lat, setLat] = useState(0);
-    const [lng, setLng] = useState(0);
-    const [address, setAddress] = useState('');
-
-    const gpsLocation = {
-        lat: lat,
-        lng: lng,
-    };
 
     useEffect(() => {
-        fetchLocation();
-        onValue(ref(db, '/lat'), (snapshot) => {
-            setLat(0);
+        onValue(ref(db, '/coordinates/latitude'), (snapshot) => {
+            setLatitudes([]);
             const data = snapshot.val();
             if (data !== null) {
-                setLat(data);
+                Object.values(data).map(set => {
+                    setLatitudes((oldArray) => [...oldArray, set]);
+                });
             }
         });
-        onValue(ref(db, '/long'), (snapshot) => {
-            setLng(0);
+        onValue(ref(db, '/coordinates/longitude'), (snapshot) => {
+            setLongitudes([]);
             const data = snapshot.val();
             if (data !== null) {
-                setLng(data);
+                Object.values(data).map(set => {
+                    setLongitudes((oldArray) => [...oldArray, set]);
+                });
             }
         });
-        convertToAddress().then(r => {func(address); console.log(r)});
-        console.log(address);
     }, []);
-
-    const convertToAddress = async () => {
-        try {
-            const response = await fetch(
-                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCWj9OaziQiK004WYa73Paqr7bvbqhgLNM`
-            );
-            const data = await response.json();
-            if (data.status === 'OK') {
-                setAddress(data.results[0].formatted_address);
-            } else {
-                setAddress('Unable to retrieve address');
-            }
-        } catch (error) {
-            setAddress('Error occurred while fetching address');
-        }
-    };
-
-    const fetchLocation = async () => {
-        await getDocs(collection(db, "coordinates"))
-            .then((data) => {
-                const coordinatesFromDb = data.docs.map((doc) => ({...doc.data(), id: doc.id,}));
-                setCoordinates(coordinatesFromDb);
-                console.log(coordinates, coordinatesFromDb);
-            })
-    }
 
     const {isLoaded} = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: GOOGLE_API_KEY
     })
+
+    let latitude = 0, longitude = 0;
+
+    for ( let i = 0; i <= latitudes.length -1; i++ ) {
+        latitude = latitudes[i];
+        longitude = longitudes[i];
+    }
+
+    const gpsLocation = {
+        lat: latitude,
+        lng: longitude
+    }
+
+    console.log(latitude);
 
     const onLoad = useCallback(function callback(map) {
         const bounds = new window.google.maps.LatLngBounds(gpsLocation);

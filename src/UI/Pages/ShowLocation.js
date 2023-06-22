@@ -2,18 +2,11 @@ import {Box, Grid, Hidden} from "@mui/material";
 import pinIcon from "../../images/pinIcon.png";
 import {BlackButton} from "../Components/CustomButtons/BlackButton";
 import {LocationHandler} from "../Components/LocationHandler";
-import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 export const ShowLocation = () => {
 
-    const [address, setAddress] = useState('');
     const navigate = useNavigate();
-
-    const getAddress = (data) => {
-        console.log('Data received from child:', data);
-        setAddress(data);
-    };
 
     const handleSeeRoute = () => {
         navigate('/RouteMap');
@@ -54,14 +47,6 @@ export const ShowLocation = () => {
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
-                            {address}
-                        </Grid>
-                        <Grid item xs={12} style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
                             justifyContent: 'center',
                             paddingTop: '3rem'
                         }}>
@@ -79,7 +64,7 @@ export const ShowLocation = () => {
                         paddingRight: '2rem',
                         height: '30rem'
                     }}>
-                        <LocationHandler func={getAddress}/>
+                        <LocationHandler />
                     </Grid>
                 </Grid>
             </Hidden>
@@ -141,7 +126,7 @@ export const ShowLocation = () => {
                         paddingRight: '2rem',
                         height: '30rem'
                     }}>
-                        <LocationHandler func={getAddress}/>
+                        <LocationHandler />
                     </Grid>
                 </Grid>
             </Hidden>
