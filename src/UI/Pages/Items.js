@@ -131,7 +131,7 @@ export const Items = () => {
         dialogMessage = "Because adding this item passes the recommended weight, "
             + "we advise you not to add it. "
             + "If you want to replace an item that you already have, "
-            + "please remove it manually.";
+            + "it can be removed from the list.";
     } else if (itemWeight >= bodyWeight / 10) {
         dialogMessage = "Because adding this item passes the recommended weight, "
             + "we advise you not to add it. "
@@ -234,11 +234,11 @@ export const Items = () => {
             <Hidden only={['xs', 'sm']}>
                 <Grid container justifyContent="center">
                     <Grid item xs={12} style={{fontSize: '2rem', fontWeight: '500', marginLeft: '3rem'}}>
-                        You have these items inside your backpack
+                        You have these items inside your backpack.
                         <br></br>
                         {message}
                         <br></br>
-                        The items from your backpack weight {totalWeightKg} kilograms
+                        The items from your backpack weight {totalWeightKg} kilograms.
                     </Grid>
                     <Grid item xs={12}
                           style={{
@@ -346,9 +346,9 @@ export const Items = () => {
                                 }}>
                                     <span> The item you put in your bag has </span>
                                     <span>
-                                    {sensorWeight.weight}
-                                </span>
-                                    <span> grams </span>
+                                        {sensorWeight.weight / 1000}
+                                    </span>
+                                    <span> kilograms </span>
                                 </div>
                             </Grid>
                             <Divider style={{width: '90%', margin: '2rem auto'}}/>
@@ -377,6 +377,8 @@ export const Items = () => {
                         You have these items inside your backpack.
                         <br/>
                         {message}
+                        <br/>
+                        The items from your backpack weight {totalWeightKg} kilograms.
                     </Grid>
                     <Grid item xs={12} md={6}
                           style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '2rem'}}>
@@ -428,9 +430,9 @@ export const Items = () => {
                                 }}>
                                     <span> The item you put in your bag has </span>
                                     <span>
-                                {sensorWeight.weight}
-                            </span>
-                                    <span> grams </span>
+                                        {sensorWeight.weight / 1000}
+                                    </span>
+                                    <span> kilograms </span>
                                 </div>
                             </Grid>
                             <Divider style={{width: '90%', margin: '2rem auto'}}/>
