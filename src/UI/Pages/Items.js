@@ -9,7 +9,7 @@ import {
     TextField, Typography
 } from "@mui/material";
 import {useEffect, useState} from "react";
-import {onValue, ref, set} from "firebase/database";
+import {onValue, ref, remove, set} from "firebase/database";
 import {db} from "../../firebase";
 import charger from "../../images/charger.png";
 import chocolate from "../../images/chocolate.png";
@@ -18,21 +18,21 @@ import laptop from "../../images/laptop.png";
 import wallet from "../../images/wallet.png";
 import bottleOfWater from "../../images/bottleOfWater.png";
 import {BlackButton} from "../Components/CustomButtons/BlackButton";
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import {Chart} from "react-google-charts";
 import {uid} from "uid";
 
 export const Items = () => {
 
     const [itemName, setItemName] = useState('');
-    const [itemWeight, setItemWeight] = useState('');
+    const [itemWeight, setItemWeight] = useState(0);
     const [bodyWeight, setBodyWeight] = useState(0);
+    const [sensorWeight, setSensorWeight] = useState(0);
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(true);
     const [formItems, setFormItems] = useState([]);
-    const [initialWeightValues, setInitialWeightValues] = useState([]);
-    const items = [], src = [], weightValuesKg = [], weightValues = [];
-    const range = 50;
-    let totalWeight = 0, message, validate = true, dialogMessage = '', arr = [], isItemInRange;
+    const items = [], src = [];
+    let totalWeightKg = 0, totalWeight, message, validate = true, dialogMessage = '', weightValues;
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -53,40 +53,37 @@ export const Items = () => {
                 });
             }
         });
+        onValue(ref(db, '/weightValues'), (snapshot) => {
+            setSensorWeight(0);
+            const data = snapshot.val();
+            if (data !== null) {
+                setSensorWeight(data);
+            }
+        });
     }, []);
 
     useEffect(() => {
         addBodyWeightToDatabase();
     }, []);
 
-    useEffect(() => {
-        onValue(ref(db, '/weightValues'), (snapshot) => {
-            setInitialWeightValues([]);
-            const data = snapshot.val();
-            if (data !== null) {
-                Object.values(data).map(set => {
-                    setInitialWeightValues((oldArray) => [...oldArray, set]);
-                });
-            }
+    const deleteItem = (uuid) => {
+        const deleteRef = ref(db, "/addedItems/" + uuid);
+        remove(deleteRef).then(() => {
+            console.log("item removed");
         });
-    }, []);
-
-    const searchItemWithRange = (arr, target, range) => {
-        return arr.some((item) => Math.abs(item - target) <= range);
     };
 
-    for (let i = 0; i < initialWeightValues.length; i++) {
-        const number = Math.floor(initialWeightValues[i]);
-
-        if (!searchItemWithRange(weightValues, number, 10)) {
-            weightValues.push(number);
-        }
-    }
+    weightValues = Object.values(formItems).map(function (item) {
+        return +item.item_weight;
+    });
 
     for (let i = 0; i < weightValues.length; i++) {
-        arr.push(weightValues[i]);
-        totalWeight += weightValues[i];
+        totalWeightKg += weightValues[i];
     }
+
+    totalWeightKg = totalWeightKg.toFixed(2);
+
+    totalWeight = totalWeightKg * 1000;
 
     const handleWeightChange = (event) => {
         setBodyWeight(event.target.value);
@@ -125,13 +122,7 @@ export const Items = () => {
         addItemToDatabase();
         handleClose();
         setItemName('');
-        setItemWeight('');
-    }
-
-    if( itemWeight ) {
-        isItemInRange = searchItemWithRange(arr, itemWeight * 1000, range);
-    } else {
-        isItemInRange = false;
+        setItemWeight(0);
     }
 
     if (bodyWeight === 0) {
@@ -148,7 +139,7 @@ export const Items = () => {
             + "please remove it manually.";
     }
 
-    if (itemWeight === '' || itemName === '' || bodyWeight === 0) {
+    if (itemWeight === 0 || itemName === '' || bodyWeight === 0) {
         validate = false;
     }
 
@@ -156,53 +147,34 @@ export const Items = () => {
         dialogMessage = 'Update your body weight first';
     }
 
-    for (let i = 0; i < weightValues.length; i++) {
-        const weight = weightValues[i];
-        weightValuesKg[i] = weightValues[i]/1000;
-
-        if (weight > 100 && weight < 300) {
-            items[i] = "wallet";
-            src[i] = wallet;
-        } else if (weight > 350 && weight < 480) {
-            items[i] = "bottle of water";
-            src[i] = bottleOfWater;
-        } else if (weight > 1950 && weight < 2550) {
-            items[i] = "laptop";
-            src[i] = laptop;
-        }
-    }
-
     const importMapping = {
         charger: charger,
         chocolate: chocolate,
-        apple: apple
+        apple: apple,
+        laptop: laptop,
+        wallet: wallet,
+        bottleOfWater: bottleOfWater,
     };
 
     formItems.forEach(formItem => {
-        const lowerRange = parseFloat(formItem.item_weight) - 0.5;
-        const upperRange = parseFloat(formItem.item_weight) + 0.5;
-
-        weightValuesKg.forEach(weight => {
-            if (weight >= lowerRange && weight <= upperRange) {
-                items.push(formItem.item_name);
-                src.push(importMapping[formItem.item_name]);
-            }
-        });
+        items.push(formItem);
+        src.push(importMapping[formItem.item_name]);
     });
 
-    if ( totalWeight < bodyWeight * 100 ) {
+    if (totalWeight < bodyWeight * 100) {
         message = '';
     } else {
-        if( totalWeight !== 0 )
-        message = 'Your backpack is heavier than it should, '
-            + 'we advise you to give up on the unnecessary things because wearing it like this '
-            + 'may affect you health. ';
+        if (totalWeight !== 0)
+            message = 'Your backpack is heavier than it should, '
+                + 'we advise you to give up on the unnecessary things because wearing it like this '
+                + 'may affect you health. ';
+
     }
 
     const data = [["Item", "Kilograms"]];
 
     for (let i = 0; i < items.length; i++) {
-        data.push([items[i], weightValuesKg[i]]);
+        data.push([items[i].item_name, +weightValues[i]]);
     }
 
     const options = {
@@ -215,12 +187,21 @@ export const Items = () => {
         const lineSrc = src.slice(i, i + 3);
 
         const line = (
-            <div key={i} style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div key={i} style={{display: 'flex', justifyContent: 'space-evenly'}}>
                 {lineItems.map((item, index) => (
-                    <div key={index} style={{ marginRight: '4rem', display: 'flex', alignItems: 'center', flexDirection: 'column', marginBottom: '1.5rem' }}>
-                        <img src={lineSrc[index]} alt={`src${i + index + 1}`} />
-                        <div style={{ fontSize: '1.5rem', fontWeight: '500', marginTop: '1.5rem' }}>
-                            {item}
+                    <div key={index} style={{
+                        marginRight: '4rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        marginBottom: '1.5rem'
+                    }}>
+                        <img src={lineSrc[index]} alt={`src${i + index + 1}`}/>
+                        <div style={{ display: 'flex', alignItems: 'flex-end'}}>
+                            <div style={{fontSize: '1.5rem', fontWeight: '500', marginTop: '1.5rem', marginRight: '1rem'}}>
+                                {item.item_name}
+                            </div>
+                            <DeleteOutlineOutlinedIcon onClick={() => deleteItem(item.uuid)} />
                         </div>
                     </div>
                 ))}
@@ -231,11 +212,20 @@ export const Items = () => {
     }
 
     const renderedItemsMobile = items.map((item, index) => (
-        <div key={index} style={{ display: 'contents' }}>
-            <img src={src[index]} alt={`src${index + 1}`} style={{ maxWidth: '100%', height: 'auto' }} />
-            <Typography variant="subtitle1" style={{ fontSize: '1.5rem', fontWeight: '500', textAlign: 'center', marginBottom: '2rem', marginTop: '0.5rem' }}>
-                {item}
-            </Typography>
+        <div key={index} style={{display: 'contents'}}>
+            <img src={src[index]} alt={`src${index + 1}`} style={{maxWidth: '100%', height: 'auto'}}/>
+            <div style={{ display: 'flex'}}>
+                <Typography variant="subtitle1" style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '500',
+                    textAlign: 'center',
+                    marginBottom: '2rem',
+                    marginTop: '0.5rem'
+                }}>
+                    {item.item_name}
+                </Typography>
+                <DeleteOutlineOutlinedIcon onClick={() => deleteItem(item.uuid)} style={{ marginTop: '1rem', marginLeft: '1rem'}}/>
+            </div>
         </div>
     ));
 
@@ -247,6 +237,8 @@ export const Items = () => {
                         You have these items inside your backpack
                         <br></br>
                         {message}
+                        <br></br>
+                        The items from your backpack weight {totalWeightKg} kilograms
                     </Grid>
                     <Grid item xs={12}
                           style={{
@@ -258,8 +250,8 @@ export const Items = () => {
                           }}>
                         <div style={{display: 'flex', alignItems: 'center'}}>
                             {show ? (
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div style={{ marginRight: '1rem'}}>
+                                <div style={{display: 'flex', alignItems: 'center'}}>
+                                    <div style={{marginRight: '1rem'}}>
                                         Your body weight is {localStorage.getItem("bodyWeight")} kg
                                     </div>
                                     <BlackButton onClick={() => {
@@ -278,7 +270,8 @@ export const Items = () => {
                                             onChange={handleWeightChange}
                                             endAdornment={
                                                 <InputAdornment position="end">
-                                                    <BlackButton onClick={updateBodyWeight} style={{ marginRight: '-1rem', borderRadius: '0.5rem'}}>
+                                                    <BlackButton onClick={updateBodyWeight}
+                                                                 style={{marginRight: '-1rem', borderRadius: '0.5rem'}}>
                                                         Update weight
                                                     </BlackButton>
                                                 </InputAdornment>
@@ -332,10 +325,6 @@ export const Items = () => {
                                     <div style={{margin: '0rem 3rem'}}>
                                         {dialogMessage}
                                     </div>
-                                    {isItemInRange ?
-                                        <div style={{margin: '0rem 3rem'}}>
-                                            This item might get confused with another one, because of its weight
-                                        </div> : null}
                                 </DialogContent>
                                 <DialogActions style={{justifyContent: 'center'}}>
                                     {validate ? <BlackButton onClick={submitHandler}>
@@ -345,6 +334,26 @@ export const Items = () => {
                             </Dialog>
                         </div>
                     </Grid>
+                    {sensorWeight.weight ? (
+                        <>
+                            <Divider style={{width: '90%', margin: '2rem auto'}}/>
+                            <Grid item xs={12} style={{display: 'flex', justifyContent: 'center'}}>
+                                <div style={{
+                                    fontSize: '1.25rem',
+                                    fontWeight: '500',
+                                    marginLeft: '1rem',
+                                    marginRight: '1rem'
+                                }}>
+                                    <span> The item you put in your bag has </span>
+                                    <span>
+                                    {sensorWeight.weight}
+                                </span>
+                                    <span> grams </span>
+                                </div>
+                            </Grid>
+                            <Divider style={{width: '90%', margin: '2rem auto'}}/>
+                        </>
+                    ) : null}
                     <Grid item xs={12} style={{
                         marginTop: '4rem',
                         marginBottom: '4rem',
@@ -352,7 +361,7 @@ export const Items = () => {
                     }}>
                         {renderedItemsDesktop}
                     </Grid>
-                    <Divider style={{ width: '90%', border: '0.1rem solid grey' }} />
+                    <Divider style={{width: '90%', border: '0.1rem solid grey'}}/>
                     <Chart
                         chartType="PieChart"
                         data={data}
@@ -372,8 +381,8 @@ export const Items = () => {
                     <Grid item xs={12} md={6}
                           style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '2rem'}}>
                         {show ? (
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <div style={{ marginRight: '1rem'}}>
+                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                <div style={{marginRight: '1rem'}}>
                                     Your body weight is {localStorage.getItem("bodyWeight")} kg
                                 </div>
                                 <BlackButton onClick={() => {
@@ -395,7 +404,8 @@ export const Items = () => {
                                         onChange={handleWeightChange}
                                         endAdornment={
                                             <InputAdornment position="end">
-                                                <BlackButton onClick={updateBodyWeight} style={{ marginRight: '-1rem', borderRadius: '0.5rem'}}>
+                                                <BlackButton onClick={updateBodyWeight}
+                                                             style={{marginRight: '-1rem', borderRadius: '0.5rem'}}>
                                                     Update weight
                                                 </BlackButton>
                                             </InputAdornment>
@@ -406,6 +416,26 @@ export const Items = () => {
                             </>
                         )}
                     </Grid>
+                    {sensorWeight.weight ? (
+                        <>
+                            <Divider style={{width: '90%', margin: '2rem auto'}}/>
+                            <Grid item xs={12} style={{display: 'flex', justifyContent: 'center'}}>
+                                <div style={{
+                                    fontSize: '1.25rem',
+                                    fontWeight: '500',
+                                    marginLeft: '1rem',
+                                    marginRight: '1rem'
+                                }}>
+                                    <span> The item you put in your bag has </span>
+                                    <span>
+                                {sensorWeight.weight}
+                            </span>
+                                    <span> grams </span>
+                                </div>
+                            </Grid>
+                            <Divider style={{width: '90%', margin: '2rem auto'}}/>
+                        </>
+                    ) : null}
                     <Grid item xs={12} style={{display: 'flex', justifyContent: 'center', marginTop: '2rem'}}>
                         <BlackButton variant="contained" color="primary" onClick={handleClickOpen}>
                             Add item
@@ -442,11 +472,6 @@ export const Items = () => {
                                 <Typography variant="body2" style={{margin: '0rem 3rem'}}>
                                     {dialogMessage}
                                 </Typography>
-                                {isItemInRange && (
-                                    <Typography variant="body2" style={{margin: '0rem 3rem'}}>
-                                        This item might get confused with another one because of its weight
-                                    </Typography>
-                                )}
                             </DialogContent>
                             <DialogActions style={{justifyContent: 'center'}}>
                                 {validate && (
