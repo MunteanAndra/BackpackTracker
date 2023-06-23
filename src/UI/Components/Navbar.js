@@ -1,7 +1,7 @@
 import logo from '../../images/logo.png';
 import {useNavigate} from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import {Divider, Hidden, Menu, MenuItem} from "@mui/material";
+import {Hidden, Menu, MenuItem} from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import {logout} from "../../firebase";
 import {useState} from "react";
@@ -16,7 +16,6 @@ export const Navbar = ({loggedIn}) => {
     const open = Boolean(anchorEl);
     const dispatch = useDispatch();
 
-
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -28,10 +27,6 @@ export const Navbar = ({loggedIn}) => {
     const handleRedirectHome = () => {
         if(loggedIn === true)
         navigateHome('/');
-    };
-
-    const handleRedirectProfile = () => {
-        navigateHome('/Profile');
     };
 
     const handleLogout = () => {
@@ -101,10 +96,6 @@ export const Navbar = ({loggedIn}) => {
                         transformOrigin={{horizontal: 'right', vertical: 'top'}}
                         anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                     >
-                        <MenuItem onClick={handleRedirectProfile}>
-                            Overview
-                        </MenuItem>
-                        <Divider/>
                         <MenuItem onClick={handleLogout}>
                             <LogoutIcon fontSize="small" style={{marginRight: '1rem'}}/>
                             Logout
