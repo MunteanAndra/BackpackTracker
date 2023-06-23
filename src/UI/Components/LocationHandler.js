@@ -53,8 +53,6 @@ export const LocationHandler = () => {
         lng: longitude
     }
 
-    console.log(latitude);
-
     const onLoad = useCallback(function callback(map) {
         const bounds = new window.google.maps.LatLngBounds(gpsLocation);
         map.fitBounds(bounds);

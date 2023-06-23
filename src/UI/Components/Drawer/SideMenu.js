@@ -34,19 +34,19 @@ const SideMenu = (props) => {
     const drawer = (
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <List>
-                <ListItem key={'Find its location'} disablePadding>
+                <ListItem key={'Find location'} disablePadding>
                     <ListItemButton onClick={handleLocation}>
-                        <ListItemText primary={'Find its location'}/>
+                        <ListItemText primary={'Find location'}/>
                     </ListItemButton>
                 </ListItem>
-                <ListItem key={'Items that are inside'} disablePadding>
+                <ListItem key={'List of items'} disablePadding>
                     <ListItemButton onClick={handleItems}>
-                        <ListItemText primary={'Items that are inside'}/>
+                        <ListItemText primary={'List of items'}/>
                     </ListItemButton>
                 </ListItem>
-                <ListItem key={'Proper wear position'} disablePadding>
+                <ListItem key={'Adjust straps'} disablePadding>
                     <ListItemButton onClick={handlePressure}>
-                        <ListItemText primary={'Proper wear position'}/>
+                        <ListItemText primary={'Adjust straps'}/>
                     </ListItemButton>
                 </ListItem>
             </List>
