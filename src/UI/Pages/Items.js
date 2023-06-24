@@ -229,6 +229,8 @@ export const Items = () => {
         </div>
     ));
 
+    let sensorWeightKg = sensorWeight.weight / 1000;
+
     return (
         <>
             <Hidden only={['xs', 'sm']}>
@@ -346,7 +348,7 @@ export const Items = () => {
                                 }}>
                                     <span> The item you put in your bag has </span>
                                     <span>
-                                        {sensorWeight.weight / 1000}
+                                        {sensorWeightKg.toFixed(2)}
                                     </span>
                                     <span> kilograms </span>
                                 </div>
@@ -430,7 +432,7 @@ export const Items = () => {
                                 }}>
                                     <span> The item you put in your bag has </span>
                                     <span>
-                                        {sensorWeight.weight / 1000}
+                                        {sensorWeightKg.toFixed(2)}
                                     </span>
                                     <span> kilograms </span>
                                 </div>

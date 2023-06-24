@@ -39,7 +39,6 @@ export const RouteMap = () => {
     }, []);
 
     const buildMarkers = (latitudes, longitudes) => {
-
         const markers = [];
         for (let i = 0; i <= latitudes.length - 1; i++) {
             const marker = {
@@ -65,7 +64,7 @@ export const RouteMap = () => {
         googleMapsApiKey: GOOGLE_API_KEY,
     });
 
-    const handleOnLoad = (map) => {
+    const onLoad = (map) => {
         const bounds = new window.google.maps.LatLngBounds();
         markers.forEach(({ position }) => bounds.extend(position));
         map.fitBounds(bounds);
@@ -74,7 +73,7 @@ export const RouteMap = () => {
     return isLoaded ? (
         <div style={{ margin: '3rem' }}>
             <GoogleMap
-                onLoad={handleOnLoad}
+                onLoad={onLoad}
                 onClick={() => setActiveMarker(null)}
                 center={centerCoordinates}
                 zoom={15}

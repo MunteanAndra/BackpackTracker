@@ -1,17 +1,27 @@
+/*
+ Arduino pin 2 -> HX711 CLK
+ Arduino pin 3 -> HX711 DOUT
+ Arduino pin 5V -> HX711 VCC
+ Arduino pin GND -> HX711 GND
+*/
 
 #include "HX711.h"
 #include <Firebase_Arduino_WiFiNINA_HTTPClient.h>
 #include <Firebase_Arduino_WiFiNINA.h>
 #include <Arduino_LSM6DS3.h>
 
-// env.txt
+#define FIREBASE_HOST
+#define FIREBASE_AUTH
+
+#define WIFI_SSID
+#define WIFI_PASSWORD
 
 HX711 scale;
 FirebaseData firebaseData;
 
-String path = "/weightValues";
+String path = "/weightValues/weight";
 String jsonStr;
-float calibration_factor = 406; // this calibration factor is adjusted according to my load cell
+float calibration_factor = 406;
 float units;
 float ounces;
 
@@ -33,21 +43,19 @@ void setup() {
   Serial.println("HX711 calibration sketch");
   Serial.println("Remove all weight from scale");
   Serial.println("After readings begin, place known weight on scale");
-  Serial.println("Press + or a to increase calibration factor");
-  Serial.println("Press - or z to decrease calibration factor");
 
   scale.begin(3, 2);
   scale.set_scale();
-  scale.tare();  //Reset the scale to 0
+  scale.tare();
 }
 
 void loop() {
 
-  scale.set_scale(calibration_factor); //Adjust to this calibration factor
-  int y=1;
+  scale.set_scale(calibration_factor);
 
   Serial.print("Reading: ");
   units = scale.get_units(), 10;
+
   if (units < 0)
   {
     units = 0.00;
@@ -56,14 +64,10 @@ void loop() {
   Serial.print(units);
   Serial.print(" grams\n");
 
-
   if( units > 10 ) {
-    float aux = units;
-    if (Firebase.pushFloat(firebaseData, path, units)) {
+    if (Firebase.setFloat(firebaseData, path, units)) {
             Serial.println(firebaseData.dataPath() + units);
           }
-          y++;
-      // Push data using pushJSON
           jsonStr = "{ }";
       if (Firebase.pushJSON(firebaseData, "2-pushJSON", jsonStr)) {
             Serial.println(firebaseData.dataPath() + " = " + firebaseData.pushName());
@@ -74,5 +78,5 @@ void loop() {
           Serial.println();
 
   }
-  delay(3000);
+  delay(5000);
 }

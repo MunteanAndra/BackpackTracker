@@ -2,7 +2,11 @@
 #include <Firebase_Arduino_WiFiNINA.h>
 #include <Arduino_LSM6DS3.h>
 
-// import from env.txt
+#define FIREBASE_HOST
+#define FIREBASE_AUTH
+
+#define WIFI_SSID
+#define WIFI_PASSWORD
 
 FirebaseData firebaseData;
 
@@ -52,8 +56,6 @@ void loop() {
   Serial.println(x4);
   delay(500);
 
-
-   // Send data to Firebase with specific path
     if (x1>0 && Firebase.setFloat(firebaseData, path + "Sensor1", x1)) {
           Serial.println(firebaseData.dataPath() + " = " + x1);
     }
@@ -70,7 +72,6 @@ void loop() {
       Serial.println(firebaseData.dataPath() + " = " + x4);
     }
 
-    // Push data using pushJSON
         jsonStr = "{ }";
     if (Firebase.pushJSON(firebaseData, "2-pushJSON", jsonStr)) {
           Serial.println(firebaseData.dataPath() + " = " + firebaseData.pushName());

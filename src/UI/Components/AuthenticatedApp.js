@@ -66,15 +66,11 @@ export const AuthenticatedApp = () => {
     const calculateTime = () => {
         let date1 = new Date(2023, month1, day1, hour1, minute1);
         let date2 = new Date(2023, month2, day2, hour2, minute2);
-
-        let difference = date2 - date1; //milisecunde
-
-        let minutes = Math.floor(difference / 1000 / 60); //minute
-
-        let days = Math.floor(minutes / (60 * 24)); //numarul total de minute se imaprte la cate minute are o zi si se ia partea intreaga
-        let hours = Math.floor((minutes % (60 * 24)) / 60); // din ce a ramas
+        let difference = date2 - date1;
+        let minutes = Math.floor(difference / 1000 / 60);
+        let days = Math.floor(minutes / (60 * 24));
+        let hours = Math.floor((minutes % (60 * 24)) / 60);
         minutes = Math.floor((minutes % (60 * 24)) % 60);
-
         timeMessage = "You had your backpack with you for " + days + " days, " + hours + " hours, and " + minutes + " minutes.";
     }
 

@@ -44,12 +44,9 @@ export const Login = () => {
 
     const onLogInSubmit = () => {
         generateReCaptcha();
-        console.log(phoneNumber);
         const appVerifier = window.recaptchaVerifier;
         signInWithPhoneNumber(auth, phoneNumber, appVerifier)
             .then((confirmationResult) => {
-                // SMS sent. Prompt user to type the code from the message, then sign the
-                // user in with confirmationResult.confirm(code).
                 window.confirmationResult = confirmationResult;
                 setShow(true);
                 console.log("Code has been sent");
@@ -58,7 +55,7 @@ export const Login = () => {
         });
     };
 
-    const onSubmitOTP = () => {
+    const onSubmitCode = () => {
         window.confirmationResult.confirm(verificationCode).then(() => {
             handleRedirectAuthHome();
             dispatch(loginFromRedux(true));
@@ -74,26 +71,21 @@ export const Login = () => {
 
             <Grid container justifyContent="center">
                 <Hidden only={['xs','sm']}>
-                    <Grid
-                        item
-                        xs={6}
+                    <Grid item xs={6}
                         style={{
                             width: '20rem',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
-                        }}
-                    >
+                        }}>
                         <div style={{paddingLeft: '2rem'}}>
                             <img src={yellowBackpack} alt="yellowBackpack" width="100%"/>
                         </div>
                     </Grid>
                 </Hidden>
                 <Hidden only={['md','lg','xl']}>
-                    <Grid
-                        item
-                        xs={12} md={6}
+                    <Grid item xs={12} md={6}
                         style={{
                             width: '20rem',
                             display: 'flex',
@@ -101,22 +93,17 @@ export const Login = () => {
                             alignItems: 'center',
                             justifyContent: 'center',
                             marginBottom: '2rem',
-                        }}
-                    >
+                        }}>
                         <img src={loginBackpack} alt="loginBackpack" width="40%"/>
                     </Grid>
                 </Hidden>
-                <Grid
-                    item
-                    xs={12}
-                    md={6}
+                <Grid item xs={12} md={6}
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
-                    }}
-                >
+                    }}>
                     <div style={{fontWeight: '500', fontSize: '1.5rem'}}>
                         Welcome!
                     </div>
@@ -133,7 +120,7 @@ export const Login = () => {
                                     style={{minWidth: '15rem'}}
                                 />
                             </div>
-                            <BlackButton onClick={onSubmitOTP} disabled={!verificationCode} style={{ marginBottom: '2rem' }}>
+                            <BlackButton onClick={onSubmitCode} disabled={!verificationCode} style={{ marginBottom: '2rem' }}>
                                 Log in
                             </BlackButton>
                             <Collapse in={openAlertCode}>

@@ -6,7 +6,11 @@ TinyGPSPlus gps;
 #include <Firebase_Arduino_WiFiNINA.h>
 #include <Arduino_LSM6DS3.h>
 
-// import env.txt
+#define FIREBASE_HOST
+#define FIREBASE_AUTH
+
+#define WIFI_SSID
+#define WIFI_PASSWORD
 
 FirebaseData firebaseData;
 

@@ -58,7 +58,7 @@ export const Position = () => {
     backPressure = sensor2 + sensor4;
 
     if (leftStrapPressure !== rightStrapPressure) {
-        message = 'You are not properly wearing your backpack. Its position affects your back and in time it might cause you back pain. Readjust its straps and re-check the result!';
+        message = 'You are not properly wearing your backpack. Its position affects your back and in time it might cause you back pain. Readjust its straps and re-check the result! Keep adjusting until you feel comfortable.';
     } else {
         message = 'Good for you! Your wear position is correct';
     }
@@ -139,53 +139,53 @@ export const Position = () => {
                             ) :  null}
                         </Grid>
                     </Grid>
-                    <Grid item
-                          xs={12}
-                          style={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              paddingLeft: '3rem',
-                          }}
-                    >
-                        <div
-                            style={{
-                                padding: '0rem 3rem',
-                                fontSize: '1.5rem',
-                                fontWeight: '500'
-                            }}
-                        >
-                            {sensor1} leftFront
-                        </div>
-                        <div
-                            style={{
-                                padding: '0rem 3rem',
-                                fontSize: '1.5rem',
-                                fontWeight: '500'
-                            }}
-                        >
-                            {sensor2} leftBack
-                        </div>
-                        <div
-                            style={{
-                                padding: '0rem 3rem',
-                                fontSize: '1.5rem',
-                                fontWeight: '500'
-                            }}
-                        >
-                            {sensor3} rightFront
-                        </div>
-                        <div
-                            style={{
-                                padding: '0rem 3rem',
-                                fontSize: '1.5rem',
-                                fontWeight: '500'
-                            }}
-                        >
-                            {sensor4} rightBack
-                        </div>
-                    </Grid>
+                    {/*<Grid item*/}
+                    {/*      xs={12}*/}
+                    {/*      style={{*/}
+                    {/*          display: 'flex',*/}
+                    {/*          flexDirection: 'column',*/}
+                    {/*          alignItems: 'center',*/}
+                    {/*          justifyContent: 'center',*/}
+                    {/*          paddingLeft: '3rem',*/}
+                    {/*      }}*/}
+                    {/*>*/}
+                    {/*    <div*/}
+                    {/*        style={{*/}
+                    {/*            padding: '0rem 3rem',*/}
+                    {/*            fontSize: '1.5rem',*/}
+                    {/*            fontWeight: '500'*/}
+                    {/*        }}*/}
+                    {/*    >*/}
+                    {/*        {sensor1} leftFront*/}
+                    {/*    </div>*/}
+                    {/*    <div*/}
+                    {/*        style={{*/}
+                    {/*            padding: '0rem 3rem',*/}
+                    {/*            fontSize: '1.5rem',*/}
+                    {/*            fontWeight: '500'*/}
+                    {/*        }}*/}
+                    {/*    >*/}
+                    {/*        {sensor2} leftBack*/}
+                    {/*    </div>*/}
+                    {/*    <div*/}
+                    {/*        style={{*/}
+                    {/*            padding: '0rem 3rem',*/}
+                    {/*            fontSize: '1.5rem',*/}
+                    {/*            fontWeight: '500'*/}
+                    {/*        }}*/}
+                    {/*    >*/}
+                    {/*        {sensor3} rightFront*/}
+                    {/*    </div>*/}
+                    {/*    <div*/}
+                    {/*        style={{*/}
+                    {/*            padding: '0rem 3rem',*/}
+                    {/*            fontSize: '1.5rem',*/}
+                    {/*            fontWeight: '500'*/}
+                    {/*        }}*/}
+                    {/*    >*/}
+                    {/*        {sensor4} rightBack*/}
+                    {/*    </div>*/}
+                    {/*</Grid>*/}
                 </Grid>
             </Hidden>
             <Hidden only={['md', 'lg', 'xl']}>
@@ -236,14 +236,14 @@ export const Position = () => {
                             </div>
                         </div>
                     </Grid>
-                    <Grid item xs={12} style={{marginTop: '1rem'}}>
-                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                            <div style={{fontSize: '1.5rem', fontWeight: '500', padding: '0rem 3rem'}}>{sensor1} leftFront</div>
-                            <div style={{fontSize: '1.5rem', fontWeight: '500', padding: '0rem 3rem'}}>{sensor2} leftBack</div>
-                            <div style={{fontSize: '1.5rem', fontWeight: '500', padding: '0rem 3rem'}}>{sensor3} rightFront</div>
-                            <div style={{fontSize: '1.5rem', fontWeight: '500', padding: '0rem 3rem'}}>{sensor4} rightBack</div>
-                        </div>
-                    </Grid>
+                    {/*<Grid item xs={12} style={{marginTop: '1rem'}}>*/}
+                    {/*    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>*/}
+                    {/*        <div style={{fontSize: '1.5rem', fontWeight: '500', padding: '0rem 3rem'}}>{sensor1} leftFront</div>*/}
+                    {/*        <div style={{fontSize: '1.5rem', fontWeight: '500', padding: '0rem 3rem'}}>{sensor2} leftBack</div>*/}
+                    {/*        <div style={{fontSize: '1.5rem', fontWeight: '500', padding: '0rem 3rem'}}>{sensor3} rightFront</div>*/}
+                    {/*        <div style={{fontSize: '1.5rem', fontWeight: '500', padding: '0rem 3rem'}}>{sensor4} rightBack</div>*/}
+                    {/*    </div>*/}
+                    {/*</Grid>*/}
                 </Grid>
             </Hidden>
         </>
